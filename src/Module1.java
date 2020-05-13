@@ -569,14 +569,24 @@ public class Module1
 			}
 		}
 	}
-	public static void main(String args[])
+	public void module1(String str,String str1)
 	{
-		Scanner sc=new Scanner(System.in);
-		int n=sc.nextInt();
+		//Scanner sc=new Scanner(System.in);
+		int n=0;
+		//sc.nextInt();
 		int i;
-		String s=sc.next();
+		String s="";
+		//String str=sc.nextLine();
+		StringTokenizer stoken;
+		stoken=new StringTokenizer(str,",");
 		char[] arr;
 		arr=new char[100];
+		while(stoken.hasMoreTokens())
+		{
+			s=s+stoken.nextToken();
+		}
+		n=s.length();
+	//	System.out.println(n);
 		int[] present;
 		present=new int[26];
 		for(i=0;i<26;i++)
@@ -590,14 +600,28 @@ public class Module1
 			present[temp]++;
 		}
 		int m,p;
-		m=sc.nextInt();
-		String[] s1=new String[m];
-		String[] s2=new String[m];
-		for(i=0;i<m;i++)
+	//	m=sc.nextInt();
+		String[] s1=new String[100];
+		String[] s2=new String[100];
+		//str1=sc.nextLine();
+		i=0;
+		//System.out.println(n);
+		for(i=0;i<100;i++)
 		{
-			s1[i]=sc.next();
-			s2[i]=sc.next();
+			s1[i]="";
+			s2[i]="";
 		}
+		stoken=new StringTokenizer(str1,",");
+		i=0;
+		while(stoken.hasMoreTokens())
+		{
+			StringTokenizer toke;
+			toke=new StringTokenizer(stoken.nextToken(),"->");
+			s1[i]=s1[i]+toke.nextToken();
+			s2[i]=s2[i]+toke.nextToken();
+			i++;
+		}
+		m=i;
 		int j,k;
 		String remaining=removePresentElements(m,s1,s2,s);
 		String[] closure=new String[m];
@@ -697,6 +721,11 @@ public class Module1
 	}
 }
 /*
+
+A,B,C,D,E,F
+A->B,C->DE,AC->F
+
+
 6
 ABCDEF
 3
