@@ -8,10 +8,19 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-
+import java.util.*;
+import javax.swing.JList;
+import javax.swing.*;
+import java.awt.*;
+import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Combo;
 public class App {
 	private static Text txtFunction;
 	private static Text text;
+	Vector<String> vec=new Vector<String>(4); 
+	/**
+	 * @wbp.nonvisual location=110,234
+	 */
 
 	/**
 	 * Launch the application.
@@ -39,18 +48,33 @@ public class App {
 		lblFuntionalDependencies.setBounds(10, 67, 162, 26);
 		lblFuntionalDependencies.setText("Funtional Dependencies");
 		
+		Combo combo = new Combo(shell, SWT.NONE);
+		combo.setBounds(65, 167, 97, 28);;
+		
 		Button btnFindPrimaryKeys = new Button(shell, SWT.NONE);
+		
 		btnFindPrimaryKeys.addMouseListener(new MouseAdapter() {
-			//@Override
-			//System.out.println("hi");
+			
 			public void mouseDown(MouseEvent e) {
+				//static JList list=new JList<String>();
+			//	 list=new JList(vec.toString());
 				String str=txtFunction.getText();
 				String str1=text.getText();
-				obj.module1(str,str1);
+				Vector<String> vec=new Vector<String>(4);
+				obj.module1(str,str1,vec);
+				Iterator value = vec.iterator();
+				while (value.hasNext()) { 
+		         //   System.out.println(value.next());
+					
+					combo.add(value.next().toString());
+		        }
+				//combo.add(vec.toString());
 			}
 		});
 		btnFindPrimaryKeys.setBounds(65, 131, 133, 30);
 		btnFindPrimaryKeys.setText("Find Primary Keys");
+		
+		
 
 		shell.open();
 		shell.layout();

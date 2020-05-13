@@ -66,7 +66,7 @@ public class Module1
 			minclo[j]=minclo[j+1];
 		}
 	}
-	static void checkPrimaryKeys(int n,int m,String s,String closure[],int present[],String s1[])
+	static void checkPrimaryKeys(int n,int m,String s,String closure[],int present[],String s1[],Vector<String> vec)
 	{
 		int[] present2=new int[26];
 		int min=100,i,j,k,l;
@@ -109,16 +109,17 @@ public class Module1
 			}
 			if(flag==0)
 			{
-				System.out.println(s4);			
+				System.out.println(s4);	
+				vec.add(s4);
 			}		
 	}
 	//checkPrimaryKeys(n,m,a,closure,present,s1); 
-        static void powerSet(String str, int index, String curr,int n,int m,String closure[],String s1[],int present[]) 
+        static void powerSet(String str, int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> vec) 
 		{  
 		  
 		    // base case 
 		    if (index == str.length()) { 
-		          checkPrimaryKeys(n,m,curr,closure,present,s1);
+		          checkPrimaryKeys(n,m,curr,closure,present,s1,vec);
 		    } 
 		  
 		    // Two cases for every character 
@@ -128,9 +129,9 @@ public class Module1
 		    // character as part of current 
 		    // subset 
 		    if(index!=str.length())
-		    powerSet(str, index + 1, curr + Character.toString(str.charAt(index)),n,m,closure,s1,present); 
+		    powerSet(str, index + 1, curr + Character.toString(str.charAt(index)),n,m,closure,s1,present,vec); 
 		if(index!=str.length())
-		    powerSet(str, index + 1, curr,n,m,closure,s1,present); 
+		    powerSet(str, index + 1, curr,n,m,closure,s1,present,vec); 
 		}
 		static void powerSet(String str, int index, String curr , String s2) 
 		{ 
@@ -569,7 +570,7 @@ public class Module1
 			}
 		}
 	}
-	public void module1(String str,String str1)
+	public void module1(String str,String str1,Vector<String> vec)
 	{
 		//Scanner sc=new Scanner(System.in);
 		int n=0;
@@ -642,7 +643,7 @@ public class Module1
 		findMinCov(n,m,s1,closure,minclo,len);
 		System.out.println("All primary keys are ");
 		//void powerSet(String str, int index = 0, String curr = "",int n,int m,String closure[],String s1[],int present[]) 
-		powerSet(s,0,"",n,m,closure,s1,present);
+		powerSet(s,0,"",n,m,closure,s1,present,vec);
 		String minCandKey=findMinCandKey(n,m,s,s1,closure,present);
 		System.out.println("Minimum candidate key is "+minCandKey);
 	//	System.out.println("hi");
