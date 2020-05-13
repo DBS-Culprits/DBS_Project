@@ -570,9 +570,10 @@ public class Module1
 			}
 		}
 	}
-	public void module1(String str,String str1,Vector<String> vec)
+	public String module1(String str,String str1,Vector<String> vec)
 	{
 		//Scanner sc=new Scanner(System.in);
+		App ob=new App();
 		int n=0;
 		//sc.nextInt();
 		int i;
@@ -645,6 +646,7 @@ public class Module1
 		//void powerSet(String str, int index = 0, String curr = "",int n,int m,String closure[],String s1[],int present[]) 
 		powerSet(s,0,"",n,m,closure,s1,present,vec);
 		String minCandKey=findMinCandKey(n,m,s,s1,closure,present);
+		//candKey=candKey+minCandKey;
 		System.out.println("Minimum candidate key is "+minCandKey);
 	//	System.out.println("hi");
 		String s6=s;
@@ -665,6 +667,7 @@ public class Module1
 		if(flag==1)
 		{
 			System.out.println("Normal form is 1NF");
+			ob.val="1NF";
 		}
 		else
 		{
@@ -673,6 +676,7 @@ public class Module1
 			if(flag2==1)
 			{
 				System.out.println("Normal form is 2NF");
+				ob.val="2NF";
 			}
 			else
 			{
@@ -683,10 +687,12 @@ public class Module1
 					System.out.println("Normal form is 3NF");
 					//findMinCov(n,m,s1,closure,minclo,len);
 					convertToBCNF(n,m,s1,closure,minclo,len);
+					ob.val="3NF";
 				}
 				else
 				{
 					System.out.println("Normal form is BCNF");
+					ob.val="BCNF";
 				}
 			}
 		}
@@ -719,6 +725,7 @@ public class Module1
 				}
 			}
 		}
+		return minCandKey;
 	}
 }
 /*
