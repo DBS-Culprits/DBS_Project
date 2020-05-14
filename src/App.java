@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.ProgressBar;
 public class App {
 	
 	static String val;
@@ -36,25 +37,25 @@ public class App {
 		Display display = Display.getDefault();
 		Shell shell = new Shell();
 		shell.setSize(668, 467);
-		shell.setText("SWT Application");
+		shell.setText("Normalization Simulator");
 		
 		Label lblVariables = new Label(shell, SWT.NONE);
-		lblVariables.setBounds(23, 22, 70, 20);
-		lblVariables.setText("Variables");
+		lblVariables.setBounds(106, 22, 70, 20);
+		lblVariables.setText("Variables :");
 		
 		txtFunction = new Text(shell, SWT.BORDER);
 		//txtFunction.setText("");
-		txtFunction.setBounds(115, 16, 254, 26);
+		txtFunction.setBounds(193, 19, 254, 26);
 		
 		text = new Text(shell, SWT.BORDER);
-		text.setBounds(178, 67, 443, 26);
+		text.setBounds(193, 64, 443, 26);
 		
 		Label lblFuntionalDependencies = new Label(shell, SWT.NONE);
-		lblFuntionalDependencies.setBounds(10, 67, 162, 26);
-		lblFuntionalDependencies.setText("Funtional Dependencies");
+		lblFuntionalDependencies.setBounds(10, 67, 166, 26);
+		lblFuntionalDependencies.setText("Funtional Dependencies :");
 		
 		Combo combo = new Combo(shell, SWT.NONE);
-		combo.setBounds(65, 167, 107, 28);;
+		combo.setBounds(37, 180, 107, 28);;
 		
 		Button btnFindPrimaryKeys = new Button(shell, SWT.NONE);
 		
@@ -74,13 +75,14 @@ public class App {
 					combo.add(value.next().toString());
 		        }
 				//combo.add(vec.toString());
+
 			}
 		});
-		btnFindPrimaryKeys.setBounds(65, 131, 133, 30);
+		btnFindPrimaryKeys.setBounds(24, 131, 133, 30);
 		btnFindPrimaryKeys.setText("Find Primary Keys");
 		
 		text_1 = new Text(shell, SWT.BORDER);
-		text_1.setBounds(212, 169, 95, 26);
+		text_1.setBounds(250, 180, 95, 26);
 		
 		Button btnMinimumCandidateKey = new Button(shell, SWT.NONE);
 		btnMinimumCandidateKey.addMouseListener(new MouseAdapter() {
@@ -91,13 +93,14 @@ public class App {
 				Vector<String> vec=new Vector<String>(4);
 				String res=obj.module1(str,str1,vec);
 				text_1.setText(res);
+				
 			}
 		});
-		btnMinimumCandidateKey.setBounds(214, 131, 175, 30);
-		btnMinimumCandidateKey.setText("Minimum Candidate Key");
+		btnMinimumCandidateKey.setBounds(229, 131, 133, 30);
+		btnMinimumCandidateKey.setText("Candidate Key");
 		
 		text_2 = new Text(shell, SWT.BORDER);
-		text_2.setBounds(418, 167, 78, 26);
+		text_2.setBounds(265, 327, 64, 26);
 		
 		Button btnNormalForm = new Button(shell, SWT.NONE);
 		btnNormalForm.addSelectionListener(new SelectionAdapter() {
@@ -108,12 +111,37 @@ public class App {
 				Vector<String> vec=new Vector<String>(4);
 				String res=obj.module1(str,str1,vec);
 				text_2.setText(val);
+	
 			}
 		});
-		btnNormalForm.setBounds(408, 131, 100, 30);
+		btnNormalForm.setBounds(243, 285, 107, 30);
 		btnNormalForm.setText("Normal Form");
 		
+		Button btnNormalize = new Button(shell, SWT.NONE);
+		btnNormalize.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				Normalization obj2 = new Normalization();
+				
+				String str=txtFunction.getText();
+				String str1=text.getText();
+				Vector<String> vec=new Vector<String>(4);
+				
+				Module1.relations = "";
+				Module1.relations = "After Normalization :-";
+				String res=obj.module1(str,str1,vec);
+				obj2.relations_textArea.setText(Module1.relations);
+				
+				//obj2.relations_textArea.append("hello");
+				obj2.setVisible(true);
+			}
+		});
+		btnNormalize.setBounds(459, 228, 145, 50);
+		btnNormalize.setText("Normalize");
 		
+		Label label = new Label(shell, SWT.SEPARATOR | SWT.VERTICAL);
+		label.setBounds(179, 131, 30, 264);
+				
 		shell.open();
 		shell.layout();
 		while (!shell.isDisposed()) {

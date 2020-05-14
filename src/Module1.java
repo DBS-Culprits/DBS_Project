@@ -1,6 +1,7 @@
 import java.util.*;
 public class Module1
 {
+	static String relations = "";
 	StringBuffer sb = new StringBuffer(40);
 	 static String swap(String str, int i, int j) 
     { 
@@ -143,6 +144,7 @@ public class Module1
 		        if(isSubstring(s2,curr)==0)
 		        {
 		        	System.out.println(curr);
+		        	relations += (curr + "\n");
 		        } 
 		    } 
 		  
@@ -574,6 +576,7 @@ public class Module1
 	{
 		//Scanner sc=new Scanner(System.in);
 		App ob=new App();
+		Normalization ob2 = new Normalization();
 		int n=0;
 		//sc.nextInt();
 		int i;
@@ -706,15 +709,24 @@ public class Module1
 				{
 					System.out.println("Relation "+(k+1));
 					System.out.print(s1[i]+" ");
+					relations += ("\n" + "Relation "+(k+1) + "\n");
+					relations += (s1[i]+" ");
+//					ob2.relations_textArea.setText("Hello World!");
+//					ob2.relations_textArea.append("Relation "+ (k+1) + "\n");
+//					ob2.relations_textArea.append(s1[i]+" ");
 					for(j=0;j<len[i];j++)
 					{
 						if(isPresent(s1[i],minclo[i][j])==0)
 						{
 							System.out.print(minclo[i][j]);
+							relations += (minclo[i][j]);
+//							ob2.relations_textArea.append(Character.toString(minclo[i][j]));
 						}
 					}
 					String temo=filter(s,s1[i],minclo[i],len[i]);
 					System.out.println("\n"+"Primary Keys are ");
+					relations += "\n"+"Primary Keys are " + "\n";
+//					ob2.relations_textArea.append("\n"+"Primary Keys are " + "\n");
 					if(k==0)
 					{
 						temo=temo+remaining;
