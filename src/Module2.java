@@ -13,26 +13,6 @@ class Bucket
     private int bf;
     private int[] keys;
     private int bucketIndex; // index inside a bucket
-
-
-    protected Bucket(int ld, int bf, boolean bit)
-    {
-        this.ld = ld;
-        this.bucketHashNum = new StringBuilder();
-        if(bit) 
-        {
-            this.bucketHashNum.insert(0, 1);  // index 0 value 1;
-        } 
-        else
-        {
-            this.bucketHashNum.insert(0, 0); // index 0 value 0;
-        }
-        this.bf = bf;
-        this.keys = new int[bf];
-        this.bucketIndex = -1;
-        this.bname = "B" + this.bucketHashNum.toString();
-    }
-
    
     protected Bucket(int ld, String bucketHashNum, int bf, boolean bit)
     {
@@ -50,6 +30,7 @@ class Bucket
         this.bf = bf;
         this.keys = new int[bf];
         this.bname = "B" + this.bucketHashNum.toString();
+     //   System.out.println("here in 2 bucket");
     }
     
 
@@ -77,17 +58,6 @@ class Bucket
             System.out.println("Either change the blocking factor or use correct sequence of keys");
         }
     }
-
-    protected Bucket bucketSplit() 
-    {
-        ++this.ld;
-        Bucket newBucket = new Bucket(this.ld, this.bucketHashNum.toString(), this.bf, true); 
-        this.bucketHashNum.insert(0, 0);
-        this.changebname();
-        this.rearrangeKeys(newBucket, 1);
-        return newBucket;
-    }
-    
     protected Bucket bucketSplit(int hashSolver)
     {
         ++this.ld;
@@ -247,8 +217,8 @@ class BucketData
         int count = ld-1; 
         this.bf = bf;
         this.dataBuckets = new ArrayList<Bucket>(); 
-        Bucket b0 = new Bucket(1, bf, false);
-        Bucket b1 = new Bucket(1, bf, true);
+        Bucket b0 = new Bucket(1,"", bf, false);
+        Bucket b1 = new Bucket(1,"", bf, true);
         this.dataBuckets.add(b0);  
         this.dataBuckets.add(b1);
         int i=0;
@@ -258,7 +228,7 @@ class BucketData
              int j=0;
             while(j!=length)
             {
-                Bucket b = this.dataBuckets.get(j).bucketSplit();
+                Bucket b = this.dataBuckets.get(j).bucketSplit(1);
                 this.dataBuckets.add(b);
                 j++;
             }
@@ -363,18 +333,18 @@ class BucketData
 
     public String currentBucket, hashvalue;
     
-    public BucketList(int gd, int ld, int bf)
+    public BucketList(int gd, int ld, int bf)//this is created when ld,gd,bf,m are taken input
     {
         this.gd = gd;
 
 
         this.modGrouper = 10;
-        this.bucketData = new BucketData(bf, ld);
-        this.bucketList = new ArrayList<ListRecord>();
+        this.bucketData = new BucketData(bf, ld);//object of class BucketData in created
+        this.bucketList = new ArrayList<ListRecord>();//array list which performs operation specified in list record
         
 
         this.generateBucketList();
-        System.out.println(Math.pow(2, gd) + " " + this.bucketData.bucketCount());
+        System.out.println(Math.pow(2, gd) + " " + this.bucketData.bucketCount());//print empty buckets
     }
 
     public void insertKey(int key)
@@ -471,7 +441,7 @@ class BucketData
         for(int i=0; i<Math.pow(2, gd); i++)
         {
             String bitString = Convert.binaryConversion(i);
-            this.bucketList.add(new ListRecord(Convert.trim(bitString, gd), bucketData.getBucket(bitString)));
+            this.bucketList.add(new ListRecord(Convert.trim(bitString, gd), bucketData.getBucket(bitString)));//VALUES
         }
     }
     public String toString()
@@ -500,8 +470,8 @@ class BucketData
 }
 class ListRecord
 {
-    StringBuilder globalHashValue;
-    Bucket bucket;
+    StringBuilder globalHashValue;//hash value which is taken input as m
+    Bucket bucket;// bucket class instance
     
     protected ListRecord(boolean bit, Bucket bucket)
     {
@@ -509,7 +479,8 @@ class ListRecord
         if(bit)
         {
             this.globalHashValue.insert(0, 1);
-        } else 
+        } 
+        else 
         {
             this.globalHashValue.insert(0, 0);
         }
@@ -569,7 +540,7 @@ class ListRecord
 }
 class Convert
 {
-    protected static String binaryConversion(int n)
+    protected static String binaryConversion(int n)//Converts an integer number to string binary
     {
         // Assuming a 10 bit string.
         int num = n;
@@ -604,7 +575,7 @@ class SortBitString implements Comparator<Bucket>
 {
     public int compare(Bucket a, Bucket b)
     {
-        return a.getBucketHashNum().compareTo(b.getBucketHashNum());
+        return a.getBucketHashNum().compareTo(b.getBucketHashNum());//for sorting according to the value 00,01
     }
 }
 class Module2 {
