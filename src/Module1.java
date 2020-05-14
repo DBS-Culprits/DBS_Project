@@ -1,16 +1,20 @@
 import java.util.*;
+
+//import Appjava;
 public class Module1
 {
 	static String relations = "";
 	StringBuffer sb = new StringBuffer(40);
-	 static String swap(String str, int i, int j) 
+	
+	 static String swap(String str, int i, int j) //Swaps two characters in a string
     { 
         StringBuilder sb = new StringBuilder(str); 
         sb.setCharAt(i, str.charAt(j)); 
         sb.setCharAt(j, str.charAt(i)); 
         return sb.toString(); 
     }
-	static String charRemoveAt(String str, int p,int n) 
+	 
+	static String charRemoveAt(String str, int p,int n) //Remove character present at a particular position in string
 	{  
 		if(p+1!=n){
 			if(p!=0)
@@ -22,8 +26,9 @@ public class Module1
           }
               else
               return str.substring(0,p-1); 
-           }  
-	static int isSubstring(String s1, String s2) 
+    }
+	
+	static int isSubstring(String s1, String s2)//checks if all the attributes of s1 is present in s2 
 	{ 
 	    int M = s1.length(); 
 	    int N = s2.length(); 
@@ -46,8 +51,9 @@ public class Module1
 			}
 		 } 
 	    return 0; 
-	} 
-	static int isPresent(String s1, char a)
+	}
+	
+	static int isPresent(String s1, char a)//Checks if a particular character is present in a string
 	{
 		int i;
 		for(i=0;i<s1.length();i++)
@@ -59,7 +65,8 @@ public class Module1
 		}
 		return 0;
 	}
-	static void remove(int l,char minclo[],int len)
+	
+	static void remove(int l,char minclo[],int len)//removes a character present at position l in the character array
 	{
 		int j,k;
 		for(j=l;j<len-1;j++)
@@ -67,12 +74,13 @@ public class Module1
 			minclo[j]=minclo[j+1];
 		}
 	}
+	
 	static void checkPrimaryKeys(int n,int m,String s,String closure[],int present[],String s1[],Vector<String> vec)
 	{
 		int[] present2=new int[26];
 		int min=100,i,j,k,l;
 		String s4=s;
-		//System.out.println("hi");
+		
 		for(i=0;i<26;i++)
 		{
 			present2[i]=0;
@@ -114,7 +122,7 @@ public class Module1
 				vec.add(s4);
 			}		
 	}
-	//checkPrimaryKeys(n,m,a,closure,present,s1); 
+	
         static void powerSet(String str, int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> vec) 
 		{  
 		  
@@ -159,6 +167,7 @@ public class Module1
 		if(index!=n)
 		    powerSet(str, index + 1, curr,s2); 
 		}
+		
 	static String filter(String s,String s1,char minclo[],int len)
 	{
 		int i,j,k,flag;
@@ -188,6 +197,7 @@ public class Module1
 		}
 		return s;
 	}
+	
 	static String removePresentElements(int m,String s1[],String s2[],String s)
 	{
 		int i,j,k,flag;
@@ -225,6 +235,7 @@ public class Module1
 		}
 		return temp;
 	}
+	
 	static void findClosure(int n,int m,String s1[],String s2[],String closure[])
 	{
 		int i,j,p,l,r,k;
@@ -384,7 +395,7 @@ public class Module1
 			}
 		}
 	}
-	//findMinCandKey(s,minCandKey,s1,closure,present);
+	
 	static String findMinCandKey(int n,int m,String s,String s1[],String closure[],int present[])
 	{
 		String minCandKey=s;
@@ -448,11 +459,10 @@ public class Module1
 			{
 				present2[j]=0;
 			}		
-		//	System.out.println("hi");
 		}
-		//System.out.println("hi");
 		return minCandKey;
 	}
+	
 	static int checkSecondNormalForm(int n,int m,String s1[],String s6,String minCandKey,String closure[])
 	{
 		int i,k,l;
@@ -489,6 +499,7 @@ public class Module1
 			}
 			return 0;
 	}
+	
 	public static int checkThirdNormalForm(int n,int m,String s1[],String closure[],String minCandKey)		//checkThirdNormalForm(n,m,s1,closure,minCandKey)
 	{
 		int i,j;
@@ -507,7 +518,7 @@ public class Module1
 			}
 		return 0;
 	}
-	//checkBCNF(n,m,s1,minCandKey);
+	
 	static int checkBCNF(int n,int m,String s1[],String minCandKey)
 	{
 		int i,j;
@@ -520,7 +531,7 @@ public class Module1
 				}
 				return 0;
 	}
-	//convertToBCNF(n,m,s1,closure,minclo,len);
+	
 	static int presentInArray(int n1,int n2,String arr1,char arr2[])//array1 present in array2
 	{
 		int i,j,k;
@@ -542,6 +553,7 @@ public class Module1
 		}
 		return 1;
 	}
+	
 	static void convertToBCNF(int n,int m,String s1[],String closure[],char minclo[][],int len[])
 	{
 		int i,j,k,l,p,r,temp;
@@ -572,10 +584,11 @@ public class Module1
 			}
 		}
 	}
+	
 	public String module1(String str,String str1,Vector<String> vec)
 	{
 		//Scanner sc=new Scanner(System.in);
-		App ob=new App();
+		App ob=new App();// Objects of App and Normalization class so that they can be used for GUI
 		Normalization ob2 = new Normalization();
 		int n=0;
 		//sc.nextInt();
@@ -583,21 +596,21 @@ public class Module1
 		String s="";
 		//String str=sc.nextLine();
 		StringTokenizer stoken;
-		stoken=new StringTokenizer(str,",");
+		stoken=new StringTokenizer(str,",");// A,B in GUI is separated to A B and stored in stoken
 		char[] arr;
 		arr=new char[100];
 		while(stoken.hasMoreTokens())
 		{
-			s=s+stoken.nextToken();
+			s=s+stoken.nextToken();// s stores the attributes in a string
 		}
-		n=s.length();
-	//	System.out.println(n);
+		n=s.length();// n for number of attributes
 		int[] present;
 		present=new int[26];
 		for(i=0;i<26;i++)
 		{
 			present[i]=0;	
 		}
+		//present[] marks those alphabets present in the attributes
 		for(i=0;i<n;i++)
 		{
 			arr[i]=s.charAt(i);
@@ -606,8 +619,8 @@ public class Module1
 		}
 		int m,p;
 	//	m=sc.nextInt();
-		String[] s1=new String[100];
-		String[] s2=new String[100];
+		String[] s1=new String[100];//LHS of FD'S
+		String[] s2=new String[100];//RHS of FD'S
 		//str1=sc.nextLine();
 		i=0;
 		//System.out.println(n);
@@ -618,7 +631,7 @@ public class Module1
 		}
 		stoken=new StringTokenizer(str1,",");
 		i=0;
-		while(stoken.hasMoreTokens())
+		while(stoken.hasMoreTokens())//Storing functional dependencies from string tokenizer to s1 and s2
 		{
 			StringTokenizer toke;
 			toke=new StringTokenizer(stoken.nextToken(),"->");
@@ -629,10 +642,11 @@ public class Module1
 		m=i;
 		int j,k;
 		String remaining=removePresentElements(m,s1,s2,s);
-		String[] closure=new String[m];
+		//removePresentElements() returns those attributes who are present in s but not in s1 and s2
+		String[] closure=new String[m];// this string stores the closure
 		System.out.println("Closure is");
-		findClosure(n,m,s1,s2,closure);
-		char[][] minclo=new char[m][n];
+		findClosure(n,m,s1,s2,closure);//function finds closure as per book algo
+		char[][] minclo=new char[m][n];// minimum cover 2d array
 		int[] len=new int[m];
 		for(i=0;i<m;i++)
 		{
@@ -641,19 +655,15 @@ public class Module1
 				minclo[i][j]=closure[i].charAt(j);
 			}
 			len[i]=closure[i].length();
-		}
+		}// length array stores the length() of one minclo[i];
 		int r,flag,l;
 		System.out.println("Minimum cover is");
-		findMinCov(n,m,s1,closure,minclo,len);
+		findMinCov(n,m,s1,closure,minclo,len);// minimal cover function as per book algo
 		System.out.println("All primary keys are ");
-		//void powerSet(String str, int index = 0, String curr = "",int n,int m,String closure[],String s1[],int present[]) 
-		powerSet(s,0,"",n,m,closure,s1,present,vec);
-		String minCandKey=findMinCandKey(n,m,s,s1,closure,present);
-		//candKey=candKey+minCandKey;
+		powerSet(s,0,"",n,m,closure,s1,present,vec);//generates powerSet to check for all combinations if it is a primary key
+		String minCandKey=findMinCandKey(n,m,s,s1,closure,present); //finds smallest primary key
 		System.out.println("Minimum candidate key is "+minCandKey);
-	//	System.out.println("hi");
-		String s6=s;
-	//	System.out.println("hi");
+		String s6=s;//s6 stores those attributes which are not part of the minimum key
 		for(i=0;i<s6.length();i++)
 		{
 			if(isPresent(minCandKey,s6.charAt(i))==1)
@@ -662,11 +672,10 @@ public class Module1
 				s6=temo;
 				i=-1;
 			}
-		//	System.out.println("hi 634");
 		}
 		int flag3=1,flag4=1;
-		//System.out.println("hi 638");
-		flag=checkSecondNormalForm(n,m,s1,s6,minCandKey,closure);//int checkSecondNormalForm(int n,int m,string s1[],string s6,string minCandKey,string closure[])
+		flag=checkSecondNormalForm(n,m,s1,s6,minCandKey,closure);
+		//checks the condition for second normal form(for partial dependency)
 		if(flag==1)
 		{
 			System.out.println("Normal form is 1NF");
@@ -675,6 +684,7 @@ public class Module1
 		else
 		{
 			int flag2=checkThirdNormalForm(n,m,s1,closure,minCandKey);
+			//checks the condition for third normal form A->B implies 1. A is a key or B is a part of key
 			flag3=flag2;
 			if(flag2==1)
 			{
@@ -684,12 +694,13 @@ public class Module1
 			else
 			{
 				int flag5=checkBCNF(n,m,s1,minCandKey);
+				//checks the condition for BCNF A->B should be a normal key
 				flag4=flag5;
 				if(flag5==1)
 				{
 					System.out.println("Normal form is 3NF");
-					//findMinCov(n,m,s1,closure,minclo,len);
 					convertToBCNF(n,m,s1,closure,minclo,len);
+					//function converts the minimal cover to BCNF
 					ob.val="3NF";
 				}
 				else
@@ -699,6 +710,7 @@ public class Module1
 				}
 			}
 		}
+		// Normalize if not in BCNF
 		if(flag4==1)
 		{
 			System.out.println("After Normalization");
@@ -710,6 +722,32 @@ public class Module1
 					System.out.println("Relation "+(k+1));
 					System.out.print(s1[i]+" ");
 					relations += ("\n" + "Relation "+(k+1) + "\n");
+					String con=s1[i];
+					if(k==0)
+					{
+						con=con+remaining;//add remaining elements to con
+					}
+					for(j=0;j<len[i];j++)
+					{
+						if(isPresent(s1[i],minclo[i][j])==0)
+						{
+							String temo=Character.toString(minclo[i][j]);
+							con=con+temo;
+						}
+					}
+					System.out.print("Attributes are\n");
+					relations += ("Attributes are: ");
+					char[] chars=con.toCharArray();
+					Arrays.sort(chars);
+					System.out.println(chars[0]);
+					relations += (chars[0]);
+					for(j=1;j<con.length();j++)
+					{
+						System.out.print(","+chars[j]);
+						relations += (","+chars[j]);
+					}
+					System.out.println("\n"+"Functional Dependencies are");
+					relations += ("\n" +"Functional Dependencies are\n");
 					relations += (s1[i]+" ");
 //					ob2.relations_textArea.setText("Hello World!");
 //					ob2.relations_textArea.append("Relation "+ (k+1) + "\n");
@@ -730,9 +768,9 @@ public class Module1
 					if(k==0)
 					{
 						temo=temo+remaining;
-						s1[i]=s1[i]+remaining;
+						s1[i]=s1[i]+remaining;//add remaining elements to temo,s1[i]
 					}
-					powerSet(temo,0,"",s1[i]);
+					powerSet(temo,0,"",s1[i]);//all supersets are primary keys
 					k++;
 				}
 			}
