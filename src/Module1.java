@@ -13,6 +13,7 @@ public class Module1
         sb.setCharAt(j, str.charAt(i)); 
         return sb.toString(); 
     }
+	 //remove character at position p in string str
 	static String charRemoveAt(String str, int p,int n) 
 	{  
 		if(p+1!=n){
@@ -26,6 +27,7 @@ public class Module1
               else
               return str.substring(0,p-1); 
            }  
+	// check if all the characters of s1 are present in s2
 	static int isSubstring(String s1, String s2) 
 	{ 
 	    int M = s1.length(); 
@@ -50,6 +52,7 @@ public class Module1
 		 } 
 	    return 0; 
 	} 
+	//checks if a character is present in string s1
 	static int isPresent(String s1, char a)
 	{
 		int i;
@@ -62,6 +65,7 @@ public class Module1
 		}
 		return 0;
 	}
+	//removes a character present al position l in character array
 	static void remove(int l,char minclo[],int len)
 	{
 		int j,k;
@@ -70,12 +74,12 @@ public class Module1
 			minclo[j]=minclo[j+1];
 		}
 	}
+	//checks if a given string can result to the inclusion of all the attributes
 	static void checkPrimaryKeys(int n,int m,String s,String closure[],int present[],String s1[],Vector<String> vec)
 	{
 		int[] present2=new int[26];
 		int min=100,i,j,k,l;
 		String s4=s;
-		//System.out.println("hi");
 		for(i=0;i<26;i++)
 		{
 			present2[i]=0;
@@ -117,7 +121,7 @@ public class Module1
 				vec.add(s4);
 			}		
 	}
-	//checkPrimaryKeys(n,m,a,closure,present,s1); 
+	//creates all possible combinations of a string and then check for the primary key
         static void powerSet(String str, int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> vec) 
 		{  
 		  
@@ -137,6 +141,7 @@ public class Module1
 		if(index!=str.length())
 		    powerSet(str, index + 1, curr,n,m,closure,s1,present,vec); 
 		}
+        //checks if a string is the superset of the give string so that it can be passed as a primary key
 		static void powerSet(String str, int index, String curr , String s2) 
 		{ 
 		    int n = str.length(); 
@@ -162,6 +167,7 @@ public class Module1
 		if(index!=n)
 		    powerSet(str, index + 1, curr,s2); 
 		}
+		//marks all characters present in s1 and minclo only
 	static String filter(String s,String s1,char minclo[],int len)
 	{
 		int i,j,k,flag;
@@ -191,6 +197,7 @@ public class Module1
 		}
 		return s;
 	}
+	//removes the characters present in string s1
 	static String removePresentElements(int m,String s1[],String s2[],String s)
 	{
 		int i,j,k,flag;
@@ -228,6 +235,7 @@ public class Module1
 		}
 		return temp;
 	}
+	// finds closure of a string(all the attributes that are indirectly or directly dependent on the string)
 	static void findClosure(int n,int m,String s1[],String s2[],String closure[])
 	{
 		int i,j,p,l,r,k;
@@ -278,6 +286,7 @@ public class Module1
 			System.out.println(s1[i]+" "+closure[i]);
 		}
 	}
+	//finds minimal cover of a string(all the attributes that are dependent only on the given string)
 	static void findMinCov(int n,int m,String s1[],String closure[],char minclo[][],int len[])
 	{
 		int i,j,p,l,r,k;
@@ -387,7 +396,7 @@ public class Module1
 			}
 		}
 	}
-	//findMinCandKey(s,minCandKey,s1,closure,present);
+	//finds smallest canidate key(removes non essential elements from the given string step by step
 	static String findMinCandKey(int n,int m,String s,String s1[],String closure[],int present[])
 	{
 		String minCandKey=s;
@@ -456,6 +465,7 @@ public class Module1
 		//System.out.println("hi");
 		return minCandKey;
 	}
+	//checks second normal form(an attribute is not partially dependent on the key)
 	static int checkSecondNormalForm(int n,int m,String s1[],String s6,String minCandKey,String closure[])
 	{
 		int i,k,l;
@@ -492,6 +502,7 @@ public class Module1
 			}
 			return 0;
 	}
+	//checks third normal form( non key to non key is not present)
 	public static int checkThirdNormalForm(int n,int m,String s1[],String closure[],String minCandKey)		//checkThirdNormalForm(n,m,s1,closure,minCandKey)
 	{
 		int i,j;
@@ -510,7 +521,7 @@ public class Module1
 			}
 		return 0;
 	}
-	//checkBCNF(n,m,s1,minCandKey);
+	//checks bcnf(only from key to other attributes functional dependencies are present)
 	static int checkBCNF(int n,int m,String s1[],String minCandKey)
 	{
 		int i,j;
@@ -523,7 +534,6 @@ public class Module1
 				}
 				return 0;
 	}
-	//convertToBCNF(n,m,s1,closure,minclo,len);
 	static int presentInArray(int n1,int n2,String arr1,char arr2[])//array1 present in array2
 	{
 		int i,j,k;
@@ -545,6 +555,7 @@ public class Module1
 		}
 		return 1;
 	}
+	//converts minimal cover to BCNF
 	static void convertToBCNF(int n,int m,String s1[],String closure[],char minclo[][],int len[])
 	{
 		int i,j,k,l,p,r,temp;
@@ -575,9 +586,9 @@ public class Module1
 			}
 		}
 	}
+	//MAIN program connected to APP
 	public String module1(String str,String str1,Vector<String> vec)
 	{	
-		//Scanner sc=new Scanner(System.in);
 		App ob=new App();
 		Normalization ob2 = new Normalization();
 		//EXCEPTIONS
@@ -732,10 +743,36 @@ public class Module1
 					System.out.println("Relation "+(k+1));
 					System.out.print(s1[i]+" ");
 					relations += ("\n" + "Relation "+(k+1) + "\n");
-					relations += (s1[i]+" ");
 //					ob2.relations_textArea.setText("Hello World!");
 //					ob2.relations_textArea.append("Relation "+ (k+1) + "\n");
 //					ob2.relations_textArea.append(s1[i]+" ");
+					String con=s1[i];
+					if(k==0)
+					{
+						con=con+remaining;//add remaining elements to con
+					}
+					for(j=0;j<len[i];j++)
+					{
+						if(isPresent(s1[i],minclo[i][j])==0)
+						{
+							String temo=Character.toString(minclo[i][j]);
+							con=con+temo;
+						}
+					}
+					System.out.print("Attributes are ");
+					relations += ("Attributes are: ");
+					char[] chars=con.toCharArray();
+					Arrays.sort(chars);
+					System.out.print(chars[0]);
+					relations += (chars[0]);
+					for(j=1;j<con.length();j++)
+					{
+						System.out.print(","+chars[j]);
+						relations += (","+chars[j]);
+					}
+					System.out.println("\n"+"Functional Dependencies are");
+					relations += ("\n" +"Functional Dependencies are\n");
+					relations += (s1[i]+" ");
 					for(j=0;j<len[i];j++)
 					{
 						if(isPresent(s1[i],minclo[i][j])==0)
