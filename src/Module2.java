@@ -589,7 +589,7 @@ class SortBitString implements Comparator<Bucket> // class for sorting the bucke
         return a.getBucketHashNum().compareTo(b.getBucketHashNum());//for sorting according to the value 00,01
     }
 }
-class Main {
+class Module2 {
     public static void main(String[] args) throws IOException {
         System.out.println("                                ***EXTENDIBLE HASHING SIMULATOR***                                    ");
         System.out.println("    ");
