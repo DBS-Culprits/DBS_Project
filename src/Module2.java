@@ -4,17 +4,27 @@ import java.awt.*;
 import java.awt.event.*;
 import java.applet.*;
 import javax.swing.*;
+/*
+   variable names : bname --> bucket name
+                    ld --> local depth
+                    gd --> global depth
+                    m --> hash number (i.e key mod m)
+                    key --> number to be operated
+                    bucketIndex -->index of the respective bucket
+                    bf --> blocking factor
+                    bucketHashNum --> string in bucket name (for eg. B001 then 001 is bucketHashNum)
 
+*/
 class Bucket
 {
-    protected String bname; // bucket name
-    private int ld;
+    protected String bname; 
+    private int ld;  
     private StringBuilder bucketHashNum;
     private int bf;
     private int[] keys;
-    private int bucketIndex; // index inside a bucket
+    private int bucketIndex; 
    
-    protected Bucket(int ld, String bucketHashNum, int bf, boolean bit)
+    protected Bucket(int ld, String bucketHashNum, int bf, boolean bit) // method to construct a bucket
     {
         this.ld = ld;
         this.bucketHashNum = new StringBuilder(bucketHashNum);
@@ -30,18 +40,20 @@ class Bucket
         this.bf = bf;
         this.keys = new int[bf];
         this.bname = "B" + this.bucketHashNum.toString();
-     //   System.out.println("here in 2 bucket");
     }
     
 
-   protected boolean checkInsert(){ 
+   protected boolean checkInsert()    // method to check if a number can be inserted in bucket
+    {    
+        // logic--> if the current index of that bucket is less than bf then number can be inserted
       boolean h= ((this.bucketIndex + 1) < this.bf);
         return h ;
     }
 
-    // function to check if bucket is empty
-    protected boolean checkEmpty()
+   
+    protected boolean checkEmpty()   // function to check if bucket is empty
     {
+        // logic- obvious
         boolean y=this.bucketIndex < 0;
         return y ;
     }
@@ -50,16 +62,21 @@ class Bucket
     {
         try 
         {
+            // logic- increment the bucket index then add the input key into keys array
             ++this.bucketIndex; 
             this.keys[this.bucketIndex] = key;
         } 
-        catch(ArrayIndexOutOfBoundsException e)
+        catch(ArrayIndexOutOfBoundsException e) // exception if bucketIndex is greater than bf-1;
         {
             System.out.println("Either change the blocking factor or use correct sequence of keys");
         }
     }
-    protected Bucket bucketSplit(int hashSolver)
+    protected Bucket bucketSplit(int hashSolver) // function for splitting a bucket
     {
+        // logic --> increment the local depth of that bucket
+        //           create a new bucket with name B1x where x is old bucketHashNum
+        //           old bucket name changed to B0x     where x is old bucketHashNum
+        //           rearrange keys in these two buckets(old bucket and new bucket) by calling rearrangeKeys function
         ++this.ld;
         Bucket newBucket = new Bucket(this.ld, this.bucketHashNum.toString(), this.bf, true);
         this.bucketHashNum.insert(0, 0);
@@ -68,8 +85,13 @@ class Bucket
         return newBucket;
     }
 
-    private void rearrangeKeys(Bucket newBucket, int hashSolver)
+    private void rearrangeKeys(Bucket newBucket, int hashSolver) // function to rearrange keys during bucket split
     {
+        /* logic -->  create a vector old values
+                      adding all values of keys array of old bucket into vector old values
+                      iterating over values in vector and find the hashed key and convert it to binary(to its ld)
+                      if this keyhash is not equal to old bucket hash num then insert it to new bucket
+        */
         ArrayList<Integer> oldValues = new ArrayList<Integer>(); 
         for(int k : this.keys) 
         {
@@ -80,7 +102,11 @@ class Bucket
         {
             int key = oldValuesIt.next();
             int hashedKey = key % hashSolver;
+          //  System.out.println(hashedKey);
+
             String keyHash = Convert.trim(Convert.binaryConversion(hashedKey), this.ld);
+           // System.out.println(keyHash);
+
             if(!this.bucketHashNum.toString().equals(keyHash))
             {
                 
@@ -92,17 +118,18 @@ class Bucket
                 }
             }
         }
-        Arrays.fill(this.keys, 0);
+        Arrays.fill(this.keys, 0); // intialising all values of keys array(old bucket) to zero
         int i=0;
-        while(i!=oldValues.size())
+        while(i!=oldValues.size()) // adding remaining all values to keys array
         {
             this.keys[i] = oldValues.get(i);
             i++;
         }
     }
 
-    protected boolean keyChecker(int key)
+    protected boolean keyChecker(int key) // to check if  a key is present or not
     {
+        //logic--> obvious
         int i=0;
         while(i!=bf)
         {
@@ -115,8 +142,9 @@ class Bucket
         return false;
     }
 
-    protected void deleteKey(int key)
+    protected void deleteKey(int key) // function to delete a key
     {
+        //logic- pretty obvious, first find the key to be deleted then from there replace each index key with index+1 key
         System.out.println("        Deleted " + key);
         int index = -1;
         int i=0;
@@ -144,76 +172,76 @@ class Bucket
         }
         --this.bucketIndex;
 }
-    protected boolean canMergeWith(Bucket mergeTo)
+    protected boolean checkMerge(Bucket mergeTo) // function to check merge
     {
+        //logic --> merge is possible if local depth of that bucket is greater than 1 AND bucket is less than half filled
         boolean f=(mergeTo.findLD() > 1);
         boolean g=(mergeTo.getBucketIndex()/this.bf <= 0.5);
         return f && g;
     }
 
-    protected void merge()
+    protected void merge() // function to merge buckets
     {
         --this.ld;
         this.bucketHashNum.deleteCharAt(0);
         this.changebname();
     }
 
-    private void changebname()
+    private void changebname() // function to change name of bucket
     {
         this.bname = "B" + this.bucketHashNum.toString();
     }
 
-    public String toString()
+    public String toString() // function to display output  (see output format to understand code)
     {
         StringBuilder str = new StringBuilder();
-        int length = 11 - this.bname.length();
-        int i=0;
-        while(i!=length)
-        {
-            str.append(" ");
-            i++;
-        }
         str.append(this.bname + ": ");
         str.append(Arrays.toString(this.keys));
         return str.toString();
     }
 
-    public boolean equals(Object O)
+    public boolean equals(Object O) // for checking equality(logic- bucketHashNum should be equal)
     {
         Bucket b = (Bucket)O;
         boolean ans=this.bucketHashNum.toString().equals(b.getBucketHashNum());
         return ans ;
     }
 
-    protected int findLD()
+    protected int findLD() // function to find local depth of bucket
     {
         return this.ld;
     }
-    protected String getBucketHashNum()
+    protected String getBucketHashNum()  // function to find hash number of that bucket for eg. 001 or 10 etc
     {
         return this.bucketHashNum.toString();
     }
-    protected int getBF()
+    protected int getBF() // function to find blocking factor of that bucket
     {
         return this.bf;
     }
-    protected int[] getKeys()
+    protected int[] getKeys() // function to get keys of respective bucket
     {
         return this.keys;
     }
-    protected int getBucketIndex()
+    protected int getBucketIndex()  // function to get bucket index(current index value) of bucket
     {
         return this.bucketIndex;
     }
 
 }
-class BucketData
+class BucketData  //this class serves the purpose of storing  all buckets
 
 {
     int bf;
-    ArrayList<Bucket> dataBuckets;  
-    protected BucketData(int bf, int ld)
+    ArrayList<Bucket> dataBuckets;  // vector of buckets
+    protected BucketData(int bf, int ld) // function to add buckets to bucket vector
     {
+      /*
+        logic--> two create two buckets B0 and B1;
+                add to the bucket vector
+                split buckets according to local depth and add to bucket vector
+     */
+
         int count = ld-1; 
         this.bf = bf;
         this.dataBuckets = new ArrayList<Bucket>(); 
@@ -224,7 +252,7 @@ class BucketData
         int i=0;
         while(i!=count)
         {
-            int length = this.dataBuckets.size(); // arraylist size
+            int length = this.dataBuckets.size();
              int j=0;
             while(j!=length)
             {
@@ -235,25 +263,28 @@ class BucketData
             i++;
 
         }
-        Convert.sortBuckets(this.dataBuckets); // sorting the buckets+
+        Convert.sortBuckets(this.dataBuckets); // sorting the buckets by using sortBuckets function
     }
 
 
-    protected void addBucket(Bucket newBucket)
+    protected void addBucket(Bucket newBucket) // adding the new bucket after a split to the Bucket vector
     {
+        // logic --> simply add and then sort
         this.dataBuckets.add(newBucket);
         Convert.sortBuckets(this.dataBuckets);
     }
 
-    protected void mergeBuckets(Bucket emptyBucket, Bucket mergeToBucket)
+    protected void mergeBuckets(Bucket emptyBucket, Bucket mergeToBucket) //merging the buckets in case of an empty bucket
     {
+        // logic --> merge using merge function and then remove the empty bucket and sort again
         mergeToBucket.merge();
         this.dataBuckets.remove(emptyBucket);
         Convert.sortBuckets(this.dataBuckets);
     }
 
-    protected Bucket getBucket(String bitString)
+    protected Bucket getBucket(String bitString) // function to find a bucket
     {
+        //logic--> find its trimmed value(explained in Convert class) and loop over the bucket vector
         for(Bucket b : this.dataBuckets)
         {
             String trimmedVal = Convert.trim(bitString, b.findLD());
@@ -262,12 +293,12 @@ class BucketData
                 return b;
             }
         }
-        return null;
+        return null; // incase bucket not found
     }
 
-    protected Bucket getSplitBucket(Bucket bucket)
+    protected Bucket getSplitBucket(Bucket bucket) // function to find split bucket
     {
-        String bname = bucket.getBucketHashNum(); //bname is bucket name
+        String bname = bucket.getBucketHashNum();
         char bit = bname.charAt(0);
         StringBuilder str = new StringBuilder(bname.substring(1));
         if(bit == '0')
@@ -292,28 +323,21 @@ class BucketData
         return null;
     }
 
-    protected int bucketCount()
+    protected int bucketCount()  // function to get count of buckets
     {
         return this.dataBuckets.size();
     }
 
-    public String toString()
+    public String toString()// to display output(see output format to understand code)
     {
         StringBuilder str = new StringBuilder();
         for(Bucket b : this.dataBuckets)
         {
             str.append("|  ");
-            int length = 11 - b.bname.length();
-            int i=0;
-
-            while(i!=length)
-            {
-                str.append(" ");
-                i++;
-            }
+         
             str.append(b.bname + "   ");
             int[] keys = b.getKeys();
-            i=0;
+             int i=0;
             while(i!=b.getBF())
             {
                 str.append(" " + keys[i] + " ");
@@ -327,35 +351,36 @@ class BucketData
  class BucketList
  {
     public int gd;
-    public int modGrouper;
+    public int modFunc; // value is equal to 10 for this simulator
     private BucketData bucketData;
     private ArrayList<ListRecord> bucketList;
 
     public String currentBucket, hashvalue;
     
-    public BucketList(int gd, int ld, int bf)//this is created when ld,gd,bf,m are taken input
+    public BucketList(int gd, int ld, int bf)// function to generate bucket list with initial parameters
     {
         this.gd = gd;
 
 
-        this.modGrouper = 10;
-        this.bucketData = new BucketData(bf, ld);//object of class BucketData in created
-        this.bucketList = new ArrayList<ListRecord>();//array list which performs operation specified in list record
+        this.modFunc = 10;
+        this.bucketData = new BucketData(bf, ld);
+        this.bucketList = new ArrayList<ListRecord>();
         
 
         this.generateBucketList();
-        System.out.println(Math.pow(2, gd) + " " + this.bucketData.bucketCount());//print empty buckets
+        System.out.println(Math.pow(2, gd) + " " + this.bucketData.bucketCount());
     }
 
-    public void insertKey(int key)
+    public void insertKey(int key) //function to insert
     {
-        int h = key % modGrouper;
+        int h = key % modFunc; // by taking mod
         ListRecord r = this.getListRecord(h);
         Bucket b = r.getBucket();
-        this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd);
+        this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd); // convert h into trimmed binary(check convert class for better understanding)
         this.currentBucket = b.toString();
       
-
+// check insert, if possible then insert else check if local depth is less than global depth or not,
+        // if ld is >=gd then increase gd and then split bucket
         if(b.checkInsert())
         {
             b.insertKey(key);
@@ -367,7 +392,7 @@ class BucketData
                 ++this.gd;
                 this.generateBucketList();
             }
-            Bucket newBucket = b.bucketSplit(modGrouper);
+            Bucket newBucket = b.bucketSplit(modFunc);
             if(b.getBucketHashNum().equals(Convert.trim(Convert.binaryConversion(h), b.findLD())))
             {
                 b.insertKey(key);
@@ -381,9 +406,9 @@ class BucketData
         }
     }
 
-    public boolean searchKey(int key)
+    public boolean searchKey(int key)// for searching a key
     {
-        int h = key % modGrouper;
+        int h = key % modFunc;
         ListRecord r = this.getListRecord(h);
         Bucket b = r.getBucket();
         this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd);
@@ -395,9 +420,10 @@ class BucketData
         return false;
     }
 
-    public void deleteKey(int key)
+    public void deleteKey(int key) // function to delete a key
     {
-        int h = key % modGrouper;
+       // logic--> check for key and delete it, incase of an empty bucket condition merge the buckets
+        int h = key % modFunc; 
         ListRecord r = this.getListRecord(h);
         Bucket b = r.getBucket();
         this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd);
@@ -413,7 +439,7 @@ class BucketData
                 System.out.println("        " + b + " is empty.");
                 Bucket splitBucket = this.bucketData.getSplitBucket(b);
                 System.out.println("        " + splitBucket + " is the split bucket.");
-                if((splitBucket != null) && (b.canMergeWith(splitBucket)))
+                if((splitBucket != null) && (b.checkMerge(splitBucket)))
                 {
                     this.bucketData.mergeBuckets(b, splitBucket);
                     this.generateBucketList();
@@ -444,7 +470,7 @@ class BucketData
             this.bucketList.add(new ListRecord(Convert.trim(bitString, gd), bucketData.getBucket(bitString)));//VALUES
         }
     }
-    public String toString()
+    public String toString() // buckets toString(see output format to understand)
     {
         StringBuilder str = new StringBuilder("\n");
         for(ListRecord r : this.bucketList)
@@ -454,24 +480,12 @@ class BucketData
         str.append(" ");
         return str.toString();
     }
- 
 
-    public String guiOutput()
-    {
-        StringBuilder str = new StringBuilder("<br/>");
-        for(ListRecord r : this.bucketList)
-        {
-            str.append(r.toString() + "  <br />");
-        }
-        str.append("                    ");
-        return "<html>" + str.toString() + "<html/>";
-    }
-  
 }
-class ListRecord
+class ListRecord // this class is for  global hashvalue
 {
-    StringBuilder globalHashValue;//hash value which is taken input as m
-    Bucket bucket;// bucket class instance
+    StringBuilder globalHashValue;
+    Bucket bucket;
     
     protected ListRecord(boolean bit, Bucket bucket)
     {
@@ -507,42 +521,37 @@ class ListRecord
         this.bucket = bucket;
     }
 
-    public boolean equals(Object O)
+    public boolean equals(Object O) // for checking equality
     {
         ListRecord dR = (ListRecord)O;
         boolean ans=this.globalHashValue.toString().equals(dR.getGlobalHashValue());
         return ans;
     }
 
-    public String toString()
+    public String toString() // function to display output(see output format to understand code)
     {
         StringBuilder s = new StringBuilder();
-        int length = 10 - this.globalHashValue.length();
         s.append("  ");
-        int i=0;
-        while(i!=length)
-        {
-            s.append(" ");
-            i++;
-        }
         s.append(this.globalHashValue.toString());
         s.append("  |  ");
         s.append(this.bucket.toString());
-        return s.toString(); // 3 + 10 + 5 + 11 + 3 = 6 + 15 + 11 = 6 + 26 = 32
+        return s.toString(); 
     }
 
-    protected String getGlobalHashValue(){
+    protected String getGlobalHashValue(){ // function to get global hash value i.e 00 or 01 or 10 etc
         return this.globalHashValue.toString();
     }
-    protected Bucket getBucket(){
+    protected Bucket getBucket(){ // function to get bucket
         return this.bucket;
     }
 }
-class Convert
+class Convert // class for basic Utils
 {
-    protected static String binaryConversion(int n)//Converts an integer number to string binary
+    protected static String binaryConversion(int n) // function to convert decimal into binary
     {
-        // Assuming a 10 bit string.
+        // logic --> Obvious
+      // Assumption --> 10 bit string
+
         int num = n;
         StringBuilder bitString = new StringBuilder();
         for(int i=0; i<10; i++)
@@ -553,8 +562,10 @@ class Convert
         return bitString.toString();
     }
 
-    protected static String trim(String bitString, int depth)
+    protected static String trim(String bitString, int depth)  // function to trim the string according to its local depth
+                                                            // for eg 2 binary conversion is 0000000010 is trimmed to 01
     {
+        // logic --> obvious
         if(bitString.length() > depth)
         {
             return bitString.substring((bitString.length() - depth), bitString.length());
@@ -565,52 +576,57 @@ class Convert
         return null;
     }
 
-    protected static void sortBuckets(ArrayList<Bucket> buckets)
+    protected static void sortBuckets(ArrayList<Bucket> buckets) //function to sort the buckets after splitting and doing other operations
     {
         Collections.sort(buckets, new SortBitString());
     }
 }
 
-class SortBitString implements Comparator<Bucket>
+class SortBitString implements Comparator<Bucket> // class for sorting the buckets
 {
     public int compare(Bucket a, Bucket b)
     {
         return a.getBucketHashNum().compareTo(b.getBucketHashNum());//for sorting according to the value 00,01
     }
 }
-class Module2 {
+class Main {
     public static void main(String[] args) throws IOException {
         System.out.println("                                ***EXTENDIBLE HASHING SIMULATOR***                                    ");
         System.out.println("    ");
-        System.out.println(" * Initial Parameters input format : bf m gd ld    ");
+        System.out.println(" * Initial Parameters input format : bf gd ld    ");
         System.out.println("                                     key operation ");
-        System.out.println("   where bf-blocking factor, m-number to compute hash, gd-global depth, ld- local depth");
+        System.out.println("   where bf-blocking factor, gd-global depth, ld- local depth");
+        System.out.println(" * Hash function is key mod 10");
         System.out.println(" * Operations are Insert - I, Delete - D, Search - S");
         System.out.println(" * Type 'exit' to exit the program ");
 
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int bf, m, gd, ld, key;  
-        BucketList bucketList = null; 
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+        int bf,gd, ld, key;  
+        BucketList bucketList = null;  // creating a null bucketlist(bucketlist is a function)
 
         System.out.print("> Input Initial Parameters: ");
-        String str = br.readLine(); 
-        StringTokenizer stoken = new StringTokenizer(str, " "); 
-                                                                
+        String str = br.readLine(); // input of initial parameters stored in string str 
+        StringTokenizer stoken = new StringTokenizer(str, " "); // for reading each parameter
+       
+       /*
+            Below code is to store parameter values in their respective variables
+       */                                                         
         while(stoken.hasMoreTokens())
         {
             bf = Integer.parseInt(stoken.nextToken());
-            m = Integer.parseInt(stoken.nextToken());
             gd = Integer.parseInt(stoken.nextToken());
-            ld = Integer.parseInt(stoken.nextToken()); // reading 4 inputs
-            bucketList = new BucketList(gd, ld, bf); 
-            System.out.println(bucketList);  
+            ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
+            bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
+            System.out.println(bucketList);    // printing the buckets with all values zero initially
         }
 
         
-
+/*
+Below do-while loop is for taking inputs of operations. Operations are insert,delete and search
+*/
         do{                   
-            str = br.readLine();
+            str = br.readLine();  // reading the input for operations. Input format key operation.
             if(!str.equals("exit"))
             {
                 if(str != null)
@@ -618,26 +634,26 @@ class Module2 {
                         stoken = new StringTokenizer(str, " ");
                         if(stoken.countTokens() < 2) // condition if only one input is given
                         {
-                            System.out.println("Please input key and operation both(check format)");
+                            System.out.println("Please input key and operation both(check input format)");
                         } 
                         else 
                         {
-                            key = Integer.parseInt(stoken.nextToken()); // first input is key
-                            switch(stoken.nextToken())   // checking for the next input
+                            key = Integer.parseInt(stoken.nextToken()); // storing key value in its variable
+                            switch(stoken.nextToken())   // cases for the operation
                             {
-                                case "I":
+                                case "I":  // Insert Case
                                  {
                                     System.out.println("Inserted " + key + ": ");
                                     bucketList.insertKey(key);
                                     break;
                                  }
-                                case "D":
+                                case "D":  // Delete case
                                 {
                                     System.out.println("Deleted " + key + ": ");
                                     bucketList.deleteKey(key);
                                     break;
                                 }
-                                case "S": 
+                                case "S":  // Search Case
                                 {
                                     System.out.println("Searching key " + key + ": ");
                                     if(bucketList.searchKey(key))
@@ -651,7 +667,7 @@ class Module2 {
                                     break;
                                 }
                                 
-                                default : 
+                                default : // case when input is different from I,S,D.
                                 {
                                     System.out.println("Not a valid operation");
                                     break;
@@ -660,10 +676,10 @@ class Module2 {
                        }
                }
             }
-       System.out.println(bucketList); 
+       System.out.println(bucketList); // Printing buckets after each operations
         } while(!str.equals("exit"));
 
-        System.out.println(bucketList);
+        System.out.println(bucketList); // Printing the buckets after exit
         System.out.println("After the all Keys are done:\n" + bucketList);
     }
 }
