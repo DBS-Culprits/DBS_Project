@@ -22,6 +22,10 @@ class Bucket
     private StringBuilder bucketHashNum;
     private int bf;
     private int[] keys;
+
+
+
+    
     private int bucketIndex; 
    
     protected Bucket(int ld, String bucketHashNum, int bf, boolean bit) // method to construct a bucket
@@ -362,7 +366,7 @@ class BucketData  //this class serves the purpose of storing  all buckets
         this.gd = gd;
 
 
-        this.modFunc = 10;
+        this.modFunc = 100;
         this.bucketData = new BucketData(bf, ld);
         this.bucketList = new ArrayList<ListRecord>();
         
