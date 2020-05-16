@@ -75,7 +75,7 @@ public class Module1
 		}
 	}
 	//checks if a given string can result to the inclusion of all the attributes
-	static void checkPrimaryKeys(int n,int m,String s,String closure[],int present[],String s1[],Vector<String> vec)
+	static void checkPrimaryKeys(int n,int m,String s,String closure[],int present[],String s1[],Vector<String> vec,Vector<String> vec2)
 	{
 		int[] present2=new int[26];
 		int min=100,i,j,k,l;
@@ -87,9 +87,11 @@ public class Module1
 			String ans;
 			ans=s4;
 			int flag=0;
+		for(j=0;j<100;j++)
+		{
 			for(k=0;k<m;k++)
 			{
-				if(isSubstring(s1[k],s4)!=-1)
+				if(isSubstring(s1[k],ans)!=-1)
 				{
 					for(l=0;l<closure[k].length();l++)
 					{
@@ -101,6 +103,7 @@ public class Module1
 					}
 				}
 			}
+		}
 			for(j=0;j<ans.length();j++)
 			{
 				int temp4=ans.charAt(j)-'A';
@@ -119,15 +122,16 @@ public class Module1
 			{
 				System.out.println(s4);	
 				vec.add(s4);
+				vec2.add(s4);
 			}		
 	}
 	//creates all possible combinations of a string and then check for the primary key
-        static void powerSet(String str, int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> vec) 
+        static void powerSet(String str, int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> vec,Vector<String> vec2) 
 		{  
 		  
 		    // base case 
 		    if (index == str.length()) { 
-		          checkPrimaryKeys(n,m,curr,closure,present,s1,vec);
+		          checkPrimaryKeys(n,m,curr,closure,present,s1,vec,vec2);
 		    } 
 		  
 		    // Two cases for every character 
@@ -137,9 +141,9 @@ public class Module1
 		    // character as part of current 
 		    // subset 
 		    if(index!=str.length())
-		    powerSet(str, index + 1, curr + Character.toString(str.charAt(index)),n,m,closure,s1,present,vec); 
+		    powerSet(str, index + 1, curr + Character.toString(str.charAt(index)),n,m,closure,s1,present,vec,vec2); 
 		if(index!=str.length())
-		    powerSet(str, index + 1, curr,n,m,closure,s1,present,vec); 
+		    powerSet(str, index + 1, curr,n,m,closure,s1,present,vec,vec2); 
 		}
         //checks if a string is the superset of the give string so that it can be passed as a primary key
 		static void powerSet(String str, int index, String curr , String s2) 
@@ -421,9 +425,11 @@ public class Module1
 			}
 			ans=s4;
 			int flag=0;
+			/*for(j=0;j<100;j++)
+		{
 			for(k=0;k<m;k++)
 			{
-				if(isSubstring(s1[k],s4)!=-1)
+				if(isSubstring(s1[k],ans)!=-1)
 				{
 					for(l=0;l<closure[k].length();l++)
 					{
@@ -434,6 +440,24 @@ public class Module1
 						}
 					}
 				}
+			}
+		}*/
+			for(j=0;j<100;j++)
+			{
+			for(k=0;k<m;k++)
+			{
+				if(isSubstring(s1[k],ans)!=-1)
+				{
+					for(l=0;l<closure[k].length();l++)
+					{
+						if(isPresent(ans,closure[k].charAt(l))==0)
+						{
+							String temo=Character.toString(closure[k].charAt(l));
+							ans=ans+temo;
+						}
+					}
+				}
+			}
 			}
 			for(j=0;j<ans.length();j++)
 			{
@@ -463,76 +487,90 @@ public class Module1
 		//	System.out.println("hi");
 		}
 		//System.out.println("hi");
+		System.out.println(s+" here "+ minCandKey);
 		return minCandKey;
 	}
 	//checks second normal form(an attribute is not partially dependent on the key)
-	static int checkSecondNormalForm(int n,int m,String s1[],String s6,String minCandKey,String closure[])
+	//checkSecondNormalForm(n,m,s1,minCandKey,nonPrime,s2,setOfCandKeys)
+	static int checkSecondNormalForm(int n,int m,String s1[],String prime,String nonPrime,String s2[],Set<String> setOfCandKeys)
 	{
 		int i,k,l;
-		n=minCandKey.length();
-			for(i=0;i<minCandKey.length();i++)
+		for(i=0;i<m;i++)
+		{
+			if(isSubstring(s2[i],prime)==-1)
 			{
-				String s4="";
-				   s4=minCandKey.substring(0,i);
-				if(i+1!=n){
-					String s5=minCandKey.substring(i+1,n-1);
-					if(i!=0)
-						s4=s4+s5;
-					else
-					{
-						s4=s5;
-					}
-				}
-				for(k=0;k<m;k++)
+				Iterator set_value = setOfCandKeys.iterator();
+				int flag=0;
+				while(set_value.hasNext())
 				{
-					if(isSubstring(s1[k],s4)!=-1)
+					String temo=set_value.next().toString();
+					if(isSubstring(s1[i],temo)==0&&!s1[i].equals(temo))
 					{
-						for(l=0;l<s6.length();l++)
-						{
-							if(isPresent(closure[k],s6.charAt(l))==1)//found a partial dependency
-							{
-								return 1;				// separate
-															//store the functional dependencies of s1[k] in ans[l][];
-															//check if s6[l] is not dependent on some other attribute
-															//erase all attributes of s6[
-							}
-						}
+						flag=1;
+						return 1;
 					}
+					
 				}
+			/*	if(flag==0)
+				{
+					return 1;
+				}*/
 			}
-			return 0;
+			
+		}
+		return 0;
 	}
 	//checks third normal form( non key to non key is not present)
-	public static int checkThirdNormalForm(int n,int m,String s1[],String closure[],String minCandKey)		//checkThirdNormalForm(n,m,s1,closure,minCandKey)
+	public static int checkThirdNormalForm(int n,int m,String s1[],String s2[],String nonPrime,String prime,Set<String> setOfCandKeys)		//checkThirdNormalForm(n,m,s1,closure,minCandKey)
 	{
 		int i,j;
 			for(i=0;i<m;i++)
 			{
-				for(j=0;j<closure[i].length();j++)
+				if(isSubstring(s2[i],prime)==-1)
 				{
-					if(isPresent(s1[i],closure[i].charAt(j))==0)
+					Iterator set_value = setOfCandKeys.iterator();
+					int flag=0;
+					while(set_value.hasNext())
 					{
-						if(!s1[i].equals(minCandKey)&&isPresent(minCandKey,closure[i].charAt(j))==0)
+						String temo=set_value.next().toString();
+						if(s1[i].equals(temo))
 						{
-							return 1;
+							flag=1;
 						}
+						
 					}
-				}
-			}
-		return 0;
-	}
-	//checks bcnf(only from key to other attributes functional dependencies are present)
-	static int checkBCNF(int n,int m,String s1[],String minCandKey)
-	{
-		int i,j;
-		    for(i=0;i<m;i++)
-				{
-					if(!s1[i].equals(minCandKey))
+					if(flag==0)
 					{
 						return 1;
 					}
 				}
-				return 0;
+			}
+		
+		return 0;
+	}
+	//checks bcnf(only from key to other attributes functional dependencies are present)
+	static int checkBCNF(int n,int m,String s1[],String s2[],String nonPrime,String prime,Set<String> setOfCandKeys)
+	{
+		int i,j;
+		for(i=0;i<m;i++)
+		{
+			Iterator set_value = setOfCandKeys.iterator();
+			int flag=0;
+			while(set_value.hasNext())
+			{
+				String temo=set_value.next().toString();
+				if(s1[i].equals(temo))
+				{
+					flag=1;
+				}
+			}
+			if(flag==0)
+			{
+				return 1;
+			}
+		}
+		
+		return 0;
 	}
 	static int presentInArray(int n1,int n2,String arr1,char arr2[])//array1 present in array2
 	{
@@ -586,11 +624,232 @@ public class Module1
 			}
 		}
 	}
+	static String findEssentialAttributes(int n,int m,String s1[],char minclo[][],int len[])
+	{
+		String s="";
+		int i,j,k,l,r;
+		for(i=0;i<m;i++)
+		{
+			for(j=0;j<s1[i].length();j++)
+			{
+				char character=s1[i].charAt(j);
+				int flag=0;
+				for(k=0;k<m;k++)
+				{
+					//if(i)
+					for(l=0;l<len[k];l++)
+					{
+						if(minclo[k][l]==character&&k!=i)
+						{
+							flag=1;
+						//	System.out.println(character+" here "+minclo[k][l]+" "+k);
+						}
+					}
+				}
+				if(flag==0)
+				{
+					//System.out.println("hi");
+					if(isPresent(s,character)==0)
+					s=s+Character.toString(character);
+				}
+			}
+		}
+		return s;
+	}
+	static String findCommonAttributes(int n,int m,String s1[],char minclo[][],int len[])
+	{
+		String ret="";
+		int i,j,k,l;
+		for(l=0;l<m;l++)
+		{
+			for(i=0;i<s1[l].length();i++)
+			{
+				int flag=0;
+				char character=s1[l].charAt(i);
+				for(j=0;j<m;j++)
+				{
+					if(j!=l)
+					{
+					for(k=0;k<len[j];k++)
+					{
+						if(minclo[j][k]==character&&j!=l)
+						{
+							flag=1;
+						}
+					}
+					}
+				}
+				if(flag==1)
+				{
+					if(isPresent(ret,character)==0)
+					ret=ret+Character.toString(character);
+				}
+			}
+		}
+		return ret;
+	}
+	static String findUselessAttributes(int n,int m,String s1[],char minclo[][],int len[])
+	{
+		String ret="";
+		int i,j,k,l;
+		for(l=0;l<m;l++)
+		{
+			for(i=0;i<len[l];i++)
+			{
+				if(isPresent(s1[l],minclo[l][i])==0)
+				{
+				int flag=0;
+				char character=minclo[l][i];
+				for(j=0;j<m;j++)
+				{
+					for(k=0;k<s1[j].length();k++)
+					{
+						if(s1[j].charAt(k)==character&&j!=l)
+						{
+							flag=1;
+							System.out.println(character+" "+j);
+						}
+					}
+				}
+				if(flag==0)
+				{
+					if(isPresent(ret,character)==0)
+					ret=ret+Character.toString(character);
+					System.out.println("HI");
+				}
+				}
+			}
+		}
+		return ret;
+	}
+	static int checkPrimaryKeys2(int n,int m,String s,String closure[],int present[],String s1[])
+	{
+		int[] present2=new int[26];
+		int min=100,i,j,k,l;
+		String s4=s;
+		for(i=0;i<26;i++)
+		{
+			present2[i]=0;
+		}
+			String ans;
+			ans=s4;
+			int flag=0;
+			for(j=0;j<100;j++)
+			{
+			for(k=0;k<m;k++)
+			{
+				if(isSubstring(s1[k],ans)!=-1)
+				{
+					for(l=0;l<closure[k].length();l++)
+					{
+						if(isPresent(ans,closure[k].charAt(l))==0)
+						{
+							String temo=Character.toString(closure[k].charAt(l));
+							ans=ans+temo;
+						}
+					}
+				}
+			}
+			}
+			for(j=0;j<ans.length();j++)
+			{
+				int temp4=ans.charAt(j)-'A';
+				if(present2[temp4]!=1)
+				present2[temp4]++;
+			}
+			for(j=0;j<26;j++)
+			{
+				if(present2[j]!=present[j])
+				{
+					flag=1;
+					break;
+				}
+			}
+			if(flag==0)
+			{
+			//	System.out.println(s4);	
+				//vec.add(s4);
+				//vec2.add(s4);
+				return 1;
+			}		
+			return 0;
+	}
+	static void checkPrimaryKeys3(int n,int m,String s,String closure[],int present[],String s1[],Vector<String> cand)
+	{
+		int[] present2=new int[26];
+		int min=100,i,j,k,l;
+		String s4=s;
+		for(i=0;i<26;i++)
+		{
+			present2[i]=0;
+		}
+			String ans;
+			ans=s4;
+			int flag=0;
+			for(j=0;j<100;j++)
+			{
+			for(k=0;k<m;k++)
+			{
+				if(isSubstring(s1[k],ans)!=-1)
+				{
+					for(l=0;l<closure[k].length();l++)
+					{
+						if(isPresent(ans,closure[k].charAt(l))==0)
+						{
+							String temo=Character.toString(closure[k].charAt(l));
+							ans=ans+temo;
+						}
+					}
+				}
+			}
+			}
+			for(j=0;j<ans.length();j++)
+			{
+				int temp4=ans.charAt(j)-'A';
+				if(present2[temp4]!=1)
+				present2[temp4]++;
+			}
+			for(j=0;j<26;j++)
+			{
+				if(present2[j]!=present[j])
+				{
+					flag=1;
+					break;
+				}
+			}
+			if(flag==0)
+			{
+			//	System.out.println(s4);	
+				//vec.add(s4);
+				//vec2.add(s4);
+				cand.add(s4);
+			}		
+	}
+	static void powerSet2(String str, String esse,int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> cand) 
+	{  
+	  
+	    // base case 
+	    if (index == str.length()) { 
+	          checkPrimaryKeys3(n,m,curr+esse,closure,present,s1,cand);
+	    } 
+	  
+	    // Two cases for every character 
+	    // (i) We consider the character 
+	    // as part of current subset 
+	    // (ii) We do not consider current 
+	    // character as part of current 
+	    // subset 
+	    if(index!=str.length())
+	    powerSet2(str,esse, index + 1, curr + Character.toString(str.charAt(index)),n,m,closure,s1,present,cand); 
+	if(index!=str.length())
+	    powerSet2(str,esse, index + 1, curr,n,m,closure,s1,present,cand); 
+	}
 	//MAIN program connected to APP
 	public String module1(String str,String str1,Vector<String> vec)
 	{	
 		App ob=new App();
 		Normalization ob2 = new Normalization();
+		Vector<String> vec2=new Vector();
 		//EXCEPTIONS
 		//if Variables field is empty
 		if (str.isEmpty()) {
@@ -613,6 +872,7 @@ public class Module1
 		//String str=sc.nextLine();
 		StringTokenizer stoken;
 		stoken=new StringTokenizer(str,",");
+		//System.out.println("Min candidate key2 is "+minCandKey2);
 		char[] arr;
 		arr=new char[100];
 		while(stoken.hasMoreTokens())
@@ -661,6 +921,7 @@ public class Module1
 		String[] closure=new String[m];
 		System.out.println("Closure is");
 		findClosure(n,m,s1,s2,closure);
+		String minCandKey2=s;
 		char[][] minclo=new char[m][n];
 		int[] len=new int[m];
 		for(i=0;i<m;i++)
@@ -676,10 +937,97 @@ public class Module1
 		findMinCov(n,m,s1,closure,minclo,len);
 		System.out.println("All primary keys are ");
 		//void powerSet(String str, int index = 0, String curr = "",int n,int m,String closure[],String s1[],int present[]) 
-		powerSet(s,0,"",n,m,closure,s1,present,vec);
+		powerSet(s,0,"",n,m,closure,s1,present,vec,vec2);
+		Iterator value = vec2.iterator();
+		while (value.hasNext()) { 
+	         //   System.out.println(value.next());
+			String tempo=value.next().toString();
+				if(tempo.length()<minCandKey2.length())
+				{
+					minCandKey2=tempo;
+				}
+	        }
+		System.out.println("Min candidate key2 is "+minCandKey2);
 		String minCandKey=findMinCandKey(n,m,s,s1,closure,present);
+		minCandKey=minCandKey2;
+		String essentialAttributes="",uselessAttributes="",commonAttributes="";
+	//	uselessAttributes=uselessAttributes+remaining;
+		
+		essentialAttributes=findEssentialAttributes(n,m,s1,minclo,len);
+		commonAttributes=findCommonAttributes(n,m,s1,minclo,len);
+		uselessAttributes=findUselessAttributes(n,m,s1,minclo,len);
+		
+		System.out.println("Essential Attributes are "+essentialAttributes);
+		System.out.println("Common Attributes are "+commonAttributes);
+		System.out.println("Useless Attributes are "+uselessAttributes);
+		
+		//static int checkPrimaryKeys2(int n,int m,String s,String closure[],int present[],String s1[])
+		Vector<String> cand=new Vector<String>();
+		if(checkPrimaryKeys2(n,m,essentialAttributes,closure,present,s1)==1)
+		{
+			cand.add(essentialAttributes);
+		}
+		else
+		{
+			//static void powerSet2(String str, String esse,int index, String curr,int n,int m,String closure[],String s1[],int present[],Vector<String> cand)
+			powerSet2(commonAttributes,essentialAttributes,0,"",n,m,closure,s1,present,cand);
+		}
+		Set<String> setOfCandKeys = new HashSet<String>();
+		Iterator value2 = cand.iterator();
+		
+		while (value2.hasNext()) { 
+	         //   System.out.println(value.next());
+			String tempo=value2.next().toString();
+				System.out.println(tempo);
+				String tempor=findMinCandKey(n,m,tempo,s1,closure,present);
+				setOfCandKeys.add(tempor);
+	        }
+		Iterator set_value = setOfCandKeys.iterator();
+		value2=setOfCandKeys.iterator();
+		System.out.println("All candidate keys are");
+		while (set_value.hasNext()) { 
+	         //   System.out.println(value.next());
+			String tempo=set_value.next().toString();
+				System.out.println(tempo);
+	        }
+		
+		while (value2.hasNext()) { 
+	         //   System.out.println(value.next());
+			String tempo=value2.next().toString();
+				//System.out.println(tempo);
+				for(i=0;i<tempo.length();i++)
+				{
+					if(isPresent(minCandKey,tempo.charAt(i))==0)
+					{
+						minCandKey=minCandKey+Character.toString(tempo.charAt(i));
+					}
+				}
+	        }
+	/*	value2=setOfCandKeys.iterator();
+		while (value2.hasNext()) { 
+			String tempo=value2.next().toString();
+			Iterator value3=setOfCandKeys.iterator();
+				while(value3.hasNext())
+				{
+					String temo=value3.next().toString();
+					if(isSubstring(tempo,temo)==0&&!temo.equals(tempo))
+					{
+						setOfCandKeys.remove(temo);
+					}
+				}
+	        }*/
+		String nonPrime="";
+		for(i=0;i<s.length();i++)
+		{
+			if(isPresent(minCandKey,s.charAt(i))==0)
+			{
+				nonPrime=nonPrime+Character.toString(s.charAt(i));
+			}
+		}
+		System.out.println("After concatenation "+minCandKey);
+		System.out.println("Non Prime attributes are "+ nonPrime);
 		//candKey=candKey+minCandKey;
-		System.out.println("Minimum candidate key is "+minCandKey);
+		//System.out.println("Minimum candidate key is "+minCandKey);
 	//	System.out.println("hi");
 		String s6=s;
 	//	System.out.println("hi");
@@ -695,7 +1043,7 @@ public class Module1
 		}
 		int flag3=1,flag4=1;
 		//System.out.println("hi 638");
-		flag=checkSecondNormalForm(n,m,s1,s6,minCandKey,closure);//int checkSecondNormalForm(int n,int m,string s1[],string s6,string minCandKey,string closure[])
+		flag=checkSecondNormalForm(n,m,s1,minCandKey,nonPrime,s2,setOfCandKeys);//int checkSecondNormalForm(int n,int m,string s1[],string s6,string minCandKey,string closure[])
 		if(flag==1)
 		{
 			System.out.println("Normal form is 1NF");
@@ -704,7 +1052,8 @@ public class Module1
 		}
 		else
 		{
-			int flag2=checkThirdNormalForm(n,m,s1,closure,minCandKey);
+			//checkThirdNormalForm(int n,int m,String s1[],String s2[],String nonPrime,String prime,Set<Iterator> setOfCandKeys)
+			int flag2=checkThirdNormalForm(n,m,s1,s2,nonPrime,minCandKey,setOfCandKeys);
 			flag3=flag2;
 			if(flag2==1)
 			{
@@ -714,7 +1063,7 @@ public class Module1
 			}
 			else
 			{
-				int flag5=checkBCNF(n,m,s1,minCandKey);
+				int flag5=checkBCNF(n,m,s1,s2,nonPrime,minCandKey,setOfCandKeys);
 				flag4=flag5;
 				if(flag5==1)
 				{
@@ -741,7 +1090,6 @@ public class Module1
 				if(len[i]!=0)
 				{
 					System.out.println("Relation "+(k+1));
-					System.out.print(s1[i]+" ");
 					relations += ("\n" + "Relation "+(k+1) + "\n");
 //					ob2.relations_textArea.setText("Hello World!");
 //					ob2.relations_textArea.append("Relation "+ (k+1) + "\n");
@@ -770,8 +1118,19 @@ public class Module1
 						System.out.print(","+chars[j]);
 						relations += (","+chars[j]);
 					}
+					int conto=1;
+					for(j=0;j<len[i];j++)
+					{
+						if(isPresent(s1[i],minclo[i][j])==0)
+						{
+							conto=0;
+						}
+					}
+					if(conto==0)
+					{
 					System.out.println("\n"+"Functional Dependencies are");
 					relations += ("\n" +"Functional Dependencies are\n");
+					System.out.print(s1[i]+" ");
 					relations += (s1[i]+" ");
 					for(j=0;j<len[i];j++)
 					{
@@ -781,6 +1140,12 @@ public class Module1
 							relations += (minclo[i][j]);
 //							ob2.relations_textArea.append(Character.toString(minclo[i][j]));
 						}
+					}
+					}
+					else
+					{
+						System.out.println("\n"+"Functional Dependencies are none");
+						relations += ("\n" +"Functional Dependencies are none ");
 					}
 					String temo=filter(s,s1[i],minclo[i],len[i]);
 					System.out.println("\n"+"Primary Keys are ");
@@ -796,7 +1161,7 @@ public class Module1
 				}
 			}
 		}
-		return minCandKey;
+		return minCandKey2;
 	}
 }
 /*
@@ -861,5 +1226,8 @@ ABCD
 B A
 D A
 AB D
+
+A,B,C,D,E
+A->BCD,BC->AD,D->B
 
 */
