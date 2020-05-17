@@ -594,7 +594,13 @@ class SortBitString implements Comparator<Bucket> // class for sorting the bucke
     }
 }
 class Module2 {
-    public static void main(String[] args) throws IOException {
+	//MAIN program connected to APP2
+	//TODO
+	//Execute module2 "every time" any button is clicked in HASHING Window
+	//by "every time" taking the initial input parameters from APP2 and the Key Value from HASHING
+	//so whenever any button is clicked in HASHING...it must take the INITIAL PARAMETERS from APP2 and the entered KEY VALUE and then execute following function
+//    public static BucketList module2(int bf, int gd, int ld, int key) throws IOException {
+    public BucketList module2(int bf, int gd, int ld, int key) {
         System.out.println("                                ***EXTENDIBLE HASHING SIMULATOR***                                    ");
         System.out.println("    ");
         System.out.println(" * Initial Parameters input format : bf gd ld    ");
@@ -604,86 +610,132 @@ class Module2 {
         System.out.println(" * Operations are Insert - I, Delete - D, Search - S");
         System.out.println(" * Type 'exit' to exit the program ");
 
+        Hashing ob = new Hashing();
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-        int bf,gd, ld, key;  
-        BucketList bucketList = null;  // creating a null bucketlist(bucketlist is a function)
-
-        System.out.print("> Input Initial Parameters: ");
-        String str = br.readLine(); // input of initial parameters stored in string str 
-        StringTokenizer stoken = new StringTokenizer(str, " "); // for reading each parameter
+        //READING NEW INITIAL PARAMETERS
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+//        int bf,gd, ld, key;  
+//
+//        System.out.print("> Input Initial Parameters: ");
+//        String str = br.readLine(); // input of initial parameters stored in string str 
+//        StringTokenizer stoken = new StringTokenizer(str, " "); // for reading each parameter
+        
        
        /*
             Below code is to store parameter values in their respective variables
        */                                                         
-        while(stoken.hasMoreTokens())
-        {
-            bf = Integer.parseInt(stoken.nextToken());
-            gd = Integer.parseInt(stoken.nextToken());
-            ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
-            bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
-            System.out.println(bucketList);    // printing the buckets with all values zero initially
-        }
-
+//        while(stoken.hasMoreTokens())
+//        {
+//            bf = Integer.parseInt(stoken.nextToken());
+//            gd = Integer.parseInt(stoken.nextToken());
+//            ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
+//            bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
+//            System.out.println(bucketList);    // printing the buckets with all values zero initially
+//        }
         
+        
+        BucketList bucketList = null;  // creating a null bucketlist(bucketlist is a function)
+        bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
+        System.out.println(bucketList);    // printing the buckets with all values zero initially
+
+//DO WHILE LOOP CHANGING TO PURE SWITCH-CASE CONDITIONS  
 /*
 Below do-while loop is for taking inputs of operations. Operations are insert,delete and search
 */
-        do{                   
-            str = br.readLine();  // reading the input for operations. Input format key operation.
-            if(!str.equals("exit"))
-            {
-                if(str != null)
-                 {   
-                        stoken = new StringTokenizer(str, " ");
-                        if(stoken.countTokens() < 2) // condition if only one input is given
-                        {
-                            System.out.println("Please input key and operation both(check input format)");
-                        } 
-                        else 
-                        {
-                            key = Integer.parseInt(stoken.nextToken()); // storing key value in its variable
-                            switch(stoken.nextToken())   // cases for the operation
-                            {
-                                case "I":  // Insert Case
-                                 {
-                                    System.out.println("Inserted " + key + ": ");
-                                    bucketList.insertKey(key);
-                                    break;
-                                 }
-                                case "D":  // Delete case
-                                {
-                                    System.out.println("Deleted " + key + ": ");
-                                    bucketList.deleteKey(key);
-                                    break;
-                                }
-                                case "S":  // Search Case
-                                {
-                                    System.out.println("Searching key " + key + ": ");
-                                    if(bucketList.searchKey(key))
-                                    {
-                                        System.out.println("Present");
-                                    } 
-                                    else
-                                    {
-                                        System.out.println("Absent");
-                                    }
-                                    break;
-                                }
-                                
-                                default : // case when input is different from I,S,D.
-                                {
-                                    System.out.println("Not a valid operation");
-                                    break;
-                                }
-                            }
-                       }
-               }
-            }
-       System.out.println(bucketList); // Printing buckets after each operations
-        } while(!str.equals("exit"));
+//        do{                   
+//            str = br.readLine();  // reading the input for operations. Input format key operation.
+//            if(!str.equals("exit"))
+//            {
+//                if(str != null)
+//                 {   
+//                        stoken = new StringTokenizer(str, " ");
+//                        if(stoken.countTokens() < 2) // condition if only one input is given
+//                        {
+//                            System.out.println("Please input key and operation both(check input format)");
+//                        } 
+//                        else 
+//                        {
+//                            key = Integer.parseInt(stoken.nextToken()); // storing key value in its variable
+//                            switch(stoken.nextToken())   // cases for the operation
+//                            {
+//                                case "I":  // Insert Case
+//                                 {
+//                                    System.out.println("Inserted " + key + ": ");
+//                                    bucketList.insertKey(key);
+//                                    break;
+//                                 }
+//                                case "D":  // Delete case
+//                                {
+//                                    System.out.println("Deleted " + key + ": ");
+//                                    bucketList.deleteKey(key);
+//                                    break;
+//                                }
+//                                case "S":  // Search Case
+//                                {
+//                                    System.out.println("Searching key " + key + ": ");
+//                                    if(bucketList.searchKey(key))
+//                                    {
+//                                        System.out.println("Present");
+//                                    } 
+//                                    else
+//                                    {
+//                                        System.out.println("Absent");
+//                                    }
+//                                    break;
+//                                }
+//                                
+//                                default : // case when input is different from I,S,D.
+//                                {
+//                                    System.out.println("Not a valid operation");
+//                                    break;
+//                                }
+//                            }
+//                       }
+//               }
+//            }
+//       System.out.println(bucketList); // Printing buckets after each operations
+//        } while(!str.equals("exit"));
+        
+//SWITCH-CASE CONDITIONS
+      //TODO declare and set chkbtn in Hashing.java
+      switch(ob.chkbtn)   
+      {
+          case "I":  // Insert Case
+           {
+              System.out.println("Inserted " + key + ": ");
+              bucketList.insertKey(key);
+              break;
+           }
+          case "D":  // Delete case
+          {
+              System.out.println("Deleted " + key + ": ");
+              bucketList.deleteKey(key);
+              break;
+          }
+          case "S":  // Search Case
+          {
+              System.out.println("Searching key " + key + ": ");
+              if(bucketList.searchKey(key))
+              {
+                  System.out.println("Present");
+              } 
+              else
+              {
+                  System.out.println("Absent");
+              }
+              break;
+          }
+          
+          default : // case when input is different from I,S,D.
+          {
+              System.out.println("Not a valid operation");
+              break;
+          }
+      }
 
-        System.out.println(bucketList); // Printing the buckets after exit
-        System.out.println("After the all Keys are done:\n" + bucketList);
+      System.out.println(bucketList); // Printing the buckets after exit
+      System.out.println("After the all Keys are done:\n" + bucketList);
+      
+      return bucketList;
     }
 }
