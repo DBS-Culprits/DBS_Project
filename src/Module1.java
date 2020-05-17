@@ -487,7 +487,7 @@ public class Module1
 		//	System.out.println("hi");
 		}
 		//System.out.println("hi");
-		System.out.println(s+" here "+ minCandKey);
+		//System.out.println(s+" here "+ minCandKey);
 		return minCandKey;
 	}
 	//checks second normal form(an attribute is not partially dependent on the key)
@@ -707,7 +707,7 @@ public class Module1
 						if(s1[j].charAt(k)==character&&j!=l)
 						{
 							flag=1;
-							System.out.println(character+" "+j);
+						//	System.out.println(character+" "+j);
 						}
 					}
 				}
@@ -715,7 +715,7 @@ public class Module1
 				{
 					if(isPresent(ret,character)==0)
 					ret=ret+Character.toString(character);
-					System.out.println("HI");
+			//		System.out.println("HI");
 				}
 				}
 			}
@@ -957,6 +957,8 @@ public class Module1
 		commonAttributes=findCommonAttributes(n,m,s1,minclo,len);
 		uselessAttributes=findUselessAttributes(n,m,s1,minclo,len);
 		
+		essentialAttributes=essentialAttributes+remaining;
+		
 		System.out.println("Essential Attributes are "+essentialAttributes);
 		System.out.println("Common Attributes are "+commonAttributes);
 		System.out.println("Useless Attributes are "+uselessAttributes);
@@ -974,6 +976,7 @@ public class Module1
 		}
 		Set<String> setOfCandKeys = new HashSet<String>();
 		Iterator value2 = cand.iterator();
+	//	while
 		
 		while (value2.hasNext()) { 
 	         //   System.out.println(value.next());
