@@ -95,10 +95,13 @@ public class App2 extends JFrame {
 		JButton btnReset = new JButton("Reset");
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Clearing out all fields
 				gd_textField.setText("");
 				ld_textField.setText("");
 				bf_textField.setText("");
 				m_textField.setText("");
+				//TODO
+				//Resetting and allowing to enter initial parameters again
 			}
 		});
 		btnReset.setBounds(159, 341, 97, 25);
@@ -115,16 +118,17 @@ public class App2 extends JFrame {
 				String str3 = ld_textField.getText();
 				String str4=m_textField.getText();
 				//int bf=Integer.parseInt(str1);
-				Hashing hashing = new Hashing(Integer.parseInt(str1),Integer.parseInt(str2),Integer.parseInt(str3),Integer.parseInt(str4));
 				if (str1.isEmpty() || str2.isEmpty() || str3.isEmpty()||str4.isEmpty())
 				{
 					JOptionPane.showMessageDialog(null, "Please fill the parameter fields!");
 				}
 				else
 				{
+					Hashing hashing = new Hashing(Integer.parseInt(str1),Integer.parseInt(str2),Integer.parseInt(str3),Integer.parseInt(str4));
 					//TODO
 					//Disable any editing on APP2 Window during HASHING Window open. => for avoiding errors because we are taking "initial parameters" input continuously as arguments to execute module2 on every click of button in HASHING
 					//setVisible(false);
+					hashing.setVisible(true);
 					if(hashing.isVisible() == true)
 					{
 						gd_textField.setEditable(false);
@@ -132,8 +136,6 @@ public class App2 extends JFrame {
 						bf_textField.setEditable(false);
 						m_textField.setEditable(false);
 					}
-										
-					hashing.setVisible(true);
 				}
 			}
 		});
