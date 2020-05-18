@@ -17,6 +17,7 @@ import javax.swing.*;
 */
 class Bucket
 {
+	
     protected String bname; 
     private int ld;  
     private StringBuilder bucketHashNum;
@@ -73,6 +74,7 @@ class Bucket
         catch(ArrayIndexOutOfBoundsException e) // exception if bucketIndex is greater than bf-1;
         {
             System.out.println("Either change the blocking factor or use correct sequence of keys");
+            //insert_display += "Either change the blocking factor or use correct sequence of keys";
         }
     }
     protected Bucket bucketSplit(int hashSolver) // function for splitting a bucket
@@ -150,6 +152,7 @@ class Bucket
     {
         //logic- pretty obvious, first find the key to be deleted then from there replace each index key with index+1 key
         System.out.println("        Deleted " + key);
+        //delete_display += ("        Deleted " + key + "\n");
         int index = -1;
         int i=0;
         while(i!=this.bf)
@@ -354,6 +357,10 @@ class BucketData  //this class serves the purpose of storing  all buckets
 }
  class BucketList
  {
+	//String insert_display = "";
+	//String search_display = "";
+	String delete_display = "";
+	 
     public int gd;
     public int modFunc; // value is equal to 10 for this simulator
     private BucketData bucketData;
@@ -433,16 +440,21 @@ class BucketData  //this class serves the purpose of storing  all buckets
         this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd);
         this.currentBucket = b.toString();
         System.out.println("    Bucket is: " + b);
+        delete_display = ("    Bucket is: " + b + "\n");
         if(b.keyChecker(key))
         {
             System.out.println("        Key " + key + " is present in " + b);
+            delete_display += ("        Key " + key + " is present in " + b + "\n");
             b.deleteKey(key);
-            System.out.println("        After deleting:" + b);
+            System.out.println("        After deleting: " + b);
+            delete_display += ("        After deleting: " + b + "\n");
             if(b.checkEmpty())
             {
                 System.out.println("        " + b + " is empty.");
+                delete_display += ("        " + b + " is empty." + "\n");
                 Bucket splitBucket = this.bucketData.getSplitBucket(b);
                 System.out.println("        " + splitBucket + " is the split bucket.");
+                delete_display += ("        " + splitBucket + " is the split bucket." + "\n");
                 if((splitBucket != null) && (b.checkMerge(splitBucket)))
                 {
                     this.bucketData.mergeBuckets(b, splitBucket);
@@ -703,12 +715,14 @@ Below do-while loop is for taking inputs of operations. Operations are insert,de
           case "I":  // Insert Case
            {
               System.out.println("Inserted " + key + ": ");
+              //insert_display += ("Inserted " + key + ": " + "\n");
               bucketList.insertKey(key);
               break;
            }
           case "D":  // Delete case
           {
               System.out.println("Deleted " + key + ": ");
+              //delete_display += ("Deleted " + key + ": " + "\n");
               bucketList.deleteKey(key);
               break;
           }
@@ -718,10 +732,12 @@ Below do-while loop is for taking inputs of operations. Operations are insert,de
               if(bucketList.searchKey(key))
               {
                   System.out.println("Present");
+                  //search_display += ("Present" + "\n");
               } 
               else
               {
                   System.out.println("Absent");
+                  //search_display += ("Absent" + "\n");
               }
               break;
           }
