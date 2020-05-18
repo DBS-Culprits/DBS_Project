@@ -1147,8 +1147,8 @@ public class Module1
 						relations += ("\n" +"Functional Dependencies are none ");
 					}
 					String temo=filter(s,s1[i],minclo[i],len[i]);
-					System.out.println("\n"+"Primary Keys are ");
-					relations += "\n"+"Primary Keys are " + "\n";
+					System.out.println("\n"+"Super Keys are ");
+					relations += "\n"+"Super Keys are " + "\n";
 //					ob2.relations_textArea.append("\n"+"Primary Keys are " + "\n");
 					powerSet(temo,0,"",s1[i]);
 					k++;
@@ -1169,8 +1169,8 @@ public class Module1
 				}
 				System.out.println("\nFunctional Dependencies are none\n");
 				relations+=("\nFunctional Dependencies are none\n");
-				System.out.println("\n Primary keys are \n "+ remaining);
-				relations+=("\n Primary keys are \n "+ remaining);
+				System.out.println("\n Super Keys are \n "+ remaining);
+				relations+=("\n Super keys are \n "+ remaining);
 			}
 			
 		}
