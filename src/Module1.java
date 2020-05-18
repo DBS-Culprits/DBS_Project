@@ -1098,10 +1098,6 @@ public class Module1
 //					ob2.relations_textArea.append("Relation "+ (k+1) + "\n");
 //					ob2.relations_textArea.append(s1[i]+" ");
 					String con=s1[i];
-					if(k==0)
-					{
-						con=con+remaining;//add remaining elements to con
-					}
 					for(j=0;j<len[i];j++)
 					{
 						if(isPresent(s1[i],minclo[i][j])==0)
@@ -1154,15 +1150,29 @@ public class Module1
 					System.out.println("\n"+"Primary Keys are ");
 					relations += "\n"+"Primary Keys are " + "\n";
 //					ob2.relations_textArea.append("\n"+"Primary Keys are " + "\n");
-					if(k==0)
-					{
-						temo=temo+remaining;
-						s1[i]=s1[i]+remaining;
-					}
 					powerSet(temo,0,"",s1[i]);
 					k++;
 				}
 			}
+			if(remaining!="")
+			{
+				System.out.println("Relation "+(k+1));
+				relations += ("\n" + "Relation "+(k+1) + "\n");
+				System.out.print("Attributes are ");
+				relations += ("Attributes are: ");
+				System.out.println(remaining.charAt(0));
+				relations+=(remaining.charAt(0));
+				for(i=1;i<remaining.length();i++)
+				{
+					System.out.println(","+remaining.charAt(i));
+					relations+=(","+remaining.charAt(i));
+				}
+				System.out.println("\nFunctional Dependencies are none\n");
+				relations+=("\nFunctional Dependencies are none\n");
+				System.out.println("\n Primary keys are \n "+ remaining);
+				relations+=("\n Primary keys are \n "+ remaining);
+			}
+			
 		}
 		return minCandKey2;
 	}
