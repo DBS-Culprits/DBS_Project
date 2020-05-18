@@ -14,6 +14,8 @@ import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class Hashing extends JFrame {
 	
@@ -51,6 +53,7 @@ public class Hashing extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 668, 494);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 222, 173));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -64,6 +67,9 @@ public class Hashing extends JFrame {
 		contentPane.add(jsp);
 		
 		JLabel lblKeyValue = new JLabel("Key Value :");
+		lblKeyValue.setFont(new Font("Times New Roman", Font.BOLD, 14));
+		lblKeyValue.setForeground(new Color(0, 0, 0));
+		lblKeyValue.setHorizontalAlignment(SwingConstants.CENTER);
 		lblKeyValue.setBounds(170, 25, 73, 16);
 		contentPane.add(lblKeyValue);
 		
@@ -73,6 +79,9 @@ public class Hashing extends JFrame {
 		key_textField.setColumns(10);
 		
 		JButton btnInsert = new JButton("Insert");
+		btnInsert.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnInsert.setForeground(new Color(250, 250, 210));
+		btnInsert.setBackground(new Color(160, 82, 45));
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//chkbtn = "I";
@@ -98,6 +107,9 @@ public class Hashing extends JFrame {
 		contentPane.add(btnInsert);
 		
 		JButton btnSearch = new JButton("Search");
+		btnSearch.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnSearch.setForeground(new Color(250, 250, 210));
+		btnSearch.setBackground(new Color(160, 82, 45));
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			//	chkbtn = "S";
@@ -127,6 +139,9 @@ public class Hashing extends JFrame {
 		contentPane.add(btnSearch);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.setFont(new Font("Times New Roman", Font.BOLD, 13));
+		btnDelete.setForeground(new Color(250, 250, 210));
+		btnDelete.setBackground(new Color(160, 82, 45));
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//TODO
