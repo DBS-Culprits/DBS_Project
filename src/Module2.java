@@ -160,9 +160,9 @@ class Bucket
             if(this.keys[i] == key)
             {
                 index = i;
-                 i++;
                 break;
             }
+		i++;
         }
          i=index;
         while(i!=(this.bf-1))
