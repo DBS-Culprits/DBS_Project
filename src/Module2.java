@@ -13,7 +13,6 @@ import javax.swing.*;
                     bucketIndex -->index of the respective bucket
                     bf --> blocking factor
                     bucketHashNum --> string in bucket name (for eg. B001 then 001 is bucketHashNum)
-
 */
 class Bucket
 {
@@ -361,12 +360,12 @@ class BucketData  //this class serves the purpose of storing  all buckets
 
     public String currentBucket, hashvalue;
     
-    public BucketList(int gd, int ld, int bf,int m)// function to generate bucket list with initial parameters
+    public BucketList(int gd, int ld, int bf,int modFunc)// function to generate bucket list with initial parameters
     {
         this.gd = gd;
 
 
-        this.modFunc = m;
+        this.modFunc = modFunc;
         this.bucketData = new BucketData(bf, ld);
         this.bucketList = new ArrayList<ListRecord>();
         
@@ -624,7 +623,7 @@ class Module2 {
             gd = Integer.parseInt(stoken.nextToken());
            
             ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
-            bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
+            bucketList = new BucketList(gd, ld, bf,m);  // constructing bucketlist(buckets) from input parameters
             System.out.println(bucketList);    // printing the buckets with all values zero initially
         }
 
@@ -686,7 +685,7 @@ Below do-while loop is for taking inputs of operations. Operations are insert,de
        System.out.println(bucketList); // Printing buckets after each operations
         } while(!str.equals("exit"));
 
-        System.out.println(bucketList); // Printing the buckets after exit
-        System.out.println("After the all Keys are done:\n" + bucketList);
+        //System.out.println(bucketList); // Printing the buckets after exit
+        System.out.println("Final:\n" + bucketList);
     }
 }
