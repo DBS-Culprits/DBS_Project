@@ -107,13 +107,14 @@ public class App2 extends JFrame {
 		JButton btnConfirm = new JButton("Confirm");
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Hashing hashing = new Hashing();
 				//OPENING HASHING WINDOW
 				//TODO
 				//check for EMPTY fields and WARN!!!
 				String str1 = bf_textField.getText();
 				String str2 = gd_textField.getText();
 				String str3 = ld_textField.getText();
+				//int bf=Integer.parseInt(str1);
+				Hashing hashing = new Hashing(Integer.parseInt(str1),Integer.parseInt(str2),Integer.parseInt(str3));
 				if (str1.isEmpty() || str2.isEmpty() || str3.isEmpty())
 				{
 					JOptionPane.showMessageDialog(null, "Please fill the parameter fields!");
