@@ -13,7 +13,6 @@ import javax.swing.*;
                     bucketIndex -->index of the respective bucket
                     bf --> blocking factor
                     bucketHashNum --> string in bucket name (for eg. B001 then 001 is bucketHashNum)
-
 */
 class Bucket
 {
@@ -22,12 +21,7 @@ class Bucket
     private StringBuilder bucketHashNum;
     private int bf;
     private int[] keys;
-
-
-
-    
     private int bucketIndex; 
-   
     protected Bucket(int ld, String bucketHashNum, int bf, boolean bit) // method to construct a bucket
     {
         this.ld = ld;
@@ -72,8 +66,19 @@ class Bucket
         } 
         catch(ArrayIndexOutOfBoundsException e) // exception if bucketIndex is greater than bf-1;
         {
+            --this.bucketIndex;
             System.out.println("Either change the blocking factor or use correct sequence of keys");
         }
+    }
+    protected Bucket bucketSplit(){
+        ++this.ld;
+        Bucket newBucket = new Bucket(this.ld, this.bucketHashNum.toString(), this.bf, true);
+        this.bucketHashNum.insert(0, 0);
+        this.changebname();
+        // Distribue Keys
+        //this.distributeKeys(newBucket, 1);
+        // this.distributeKeys(newBucket, 1);
+        return newBucket;
     }
     protected Bucket bucketSplit(int hashSolver) // function for splitting a bucket
     {
@@ -157,9 +162,9 @@ class Bucket
             if(this.keys[i] == key)
             {
                 index = i;
-                 i++;
                 break;
             }
+            i++;
         }
          i=index;
         while(i!=(this.bf-1))
@@ -260,14 +265,14 @@ class BucketData  //this class serves the purpose of storing  all buckets
              int j=0;
             while(j!=length)
             {
-                Bucket b = this.dataBuckets.get(j).bucketSplit(1);
+                Bucket b = this.dataBuckets.get(j).bucketSplit();
                 this.dataBuckets.add(b);
                 j++;
             }
             i++;
 
         }
-        Convert.sortBuckets(this.dataBuckets); // sorting the buckets by using sortBuckets function
+        this.sortBuckets(this.dataBuckets); // sorting the buckets by using sortBuckets function
     }
 
 
@@ -275,7 +280,7 @@ class BucketData  //this class serves the purpose of storing  all buckets
     {
         // logic --> simply add and then sort
         this.dataBuckets.add(newBucket);
-        Convert.sortBuckets(this.dataBuckets);
+        this.sortBuckets(this.dataBuckets);
     }
 
     protected void mergeBuckets(Bucket emptyBucket, Bucket mergeToBucket) //merging the buckets in case of an empty bucket
@@ -283,7 +288,7 @@ class BucketData  //this class serves the purpose of storing  all buckets
         // logic --> merge using merge function and then remove the empty bucket and sort again
         mergeToBucket.merge();
         this.dataBuckets.remove(emptyBucket);
-        Convert.sortBuckets(this.dataBuckets);
+        this.sortBuckets(this.dataBuckets);
     }
 
     protected Bucket getBucket(String bitString) // function to find a bucket
@@ -326,6 +331,18 @@ class BucketData  //this class serves the purpose of storing  all buckets
         }
         return null;
     }
+    protected int getMaxLocalDepth(){
+        int ld = this.dataBuckets.get(0).findLD();
+        for(int i=1; i<this.dataBuckets.size(); i++){
+            if(ld < this.dataBuckets.get(i).findLD()){
+                ld = this.dataBuckets.get(i).findLD();
+            }
+        }
+        return ld;
+    }
+    protected static void sortBuckets(ArrayList<Bucket> buckets){
+        Collections.sort(buckets, new SortBitString());
+    }
 
     protected int bucketCount()  // function to get count of buckets
     {
@@ -351,22 +368,28 @@ class BucketData  //this class serves the purpose of storing  all buckets
         }
         return str.toString();
     }
+
 }
+class SortBitString implements Comparator<Bucket>{
+    public int compare(Bucket a, Bucket b){
+        return a.getBucketHashNum().compareTo(b.getBucketHashNum());
+    }
+} 
  class BucketList
  {
-    public int gd;
-    public int modFunc; // value is equal to 10 for this simulator
+    private int gd;
+    private int modFunc; // value is equal to 10 for this simulator
     private BucketData bucketData;
     private ArrayList<ListRecord> bucketList;
 
-    public String currentBucket, hashvalue;
+    private String currentBucket, hashvalue;
     
-    public BucketList(int gd, int ld, int bf)// function to generate bucket list with initial parameters
+    public BucketList(int gd, int ld, int bf,int modFunc)// function to generate bucket list with initial parameters
     {
         this.gd = gd;
 
 
-        this.modFunc = 100;
+        this.modFunc = modFunc;
         this.bucketData = new BucketData(bf, ld);
         this.bucketList = new ArrayList<ListRecord>();
         
@@ -377,7 +400,7 @@ class BucketData  //this class serves the purpose of storing  all buckets
 
     public void insertKey(int key) //function to insert
     {
-        int h = key % modFunc; // by taking mod
+      /*  int h = key % modFunc; // by taking mod
         ListRecord r = this.getListRecord(h);
         Bucket b = r.getBucket();
         this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd); // convert h into trimmed binary(check convert class for better understanding)
@@ -399,16 +422,52 @@ class BucketData  //this class serves the purpose of storing  all buckets
             Bucket newBucket = b.bucketSplit(modFunc);
             if(b.getBucketHashNum().equals(Convert.trim(Convert.binaryConversion(h), b.findLD())))
             {
+           */
+           if(!this.searchKey(key)){
+            int h = key % modFunc;
+            // System.out.println(key + " % " + modGrouper + " = Hashed key " + h + ": ");
+            ListRecord r = this.getListRecord(h);
+            Bucket b = r.getBucket();
+            this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd);
+            this.currentBucket = b.toString();
+            // System.out.println(" Bucket is: " + b);
+            if(b.checkInsert()){
+                // System.out.println(" Can Insert Key.");
+                // System.out.println("My Current Index is: " + b.getCurrentIndex());
+
                 b.insertKey(key);
             } 
             else
             {
-                newBucket.insertKey(key);
+                if(b.findLD() >= gd){
+                    ++this.gd;
+                    this.generateBucketList();
+                }
+                Bucket newBucket = b.bucketSplit(modFunc);
+                // System.out.println(" Old Bucket: " + b);
+                // System.out.println(" New Bucket: " + newBucket);
+                if(b.getBucketHashNum().equals(Convert.trim(Convert.binaryConversion(h), b.findLD()))){
+                    b.insertKey(key);
+                } else {
+                    newBucket.insertKey(key);
+                }
+                // System.out.println(" Old Bucket: " + b);
+                // System.out.println(" New Bucket: " + newBucket);
+                this.bucketData.addBucket(newBucket);
+                this.generateBucketList();
             }
-            this.bucketData.addBucket(newBucket);
-            this.generateBucketList();
+                //newBucket.insertKey(key);
+              
+
+
         }
+            else {
+            System.out.println("Key is already present!!");
+        }
+            //this.bucketData.addBucket(newBucket);
+            //this.generateBucketList();
     }
+    
 
     public boolean searchKey(int key)// for searching a key
     {
@@ -432,17 +491,17 @@ class BucketData  //this class serves the purpose of storing  all buckets
         Bucket b = r.getBucket();
         this.hashvalue = Convert.trim(Convert.binaryConversion(h), this.gd);
         this.currentBucket = b.toString();
-        System.out.println("    Bucket is: " + b);
+       // System.out.println("Bucket is: " + b);
         if(b.keyChecker(key))
         {
-            System.out.println("        Key " + key + " is present in " + b);
+         //   System.out.println("        Key " + key + " is present in " + b);
             b.deleteKey(key);
-            System.out.println("        After deleting:" + b);
+           // System.out.println("        After deleting:" + b);
             if(b.checkEmpty())
             {
-                System.out.println("        " + b + " is empty.");
+             //   System.out.println("        " + b + " is empty.");
                 Bucket splitBucket = this.bucketData.getSplitBucket(b);
-                System.out.println("        " + splitBucket + " is the split bucket.");
+             //   System.out.println("        " + splitBucket + " is the split bucket.");
                 if((splitBucket != null) && (b.checkMerge(splitBucket)))
                 {
                     this.bucketData.mergeBuckets(b, splitBucket);
@@ -468,7 +527,7 @@ class BucketData  //this class serves the purpose of storing  all buckets
     private void generateBucketList()
     {
         this.bucketList.clear();
-        for(int i=0; i<Math.pow(2, gd); i++)
+        for(int i=0; i<Math.pow(2, this.gd); i++)
         {
             String bitString = Convert.binaryConversion(i);
             this.bucketList.add(new ListRecord(Convert.trim(bitString, gd), bucketData.getBucket(bitString)));//VALUES
@@ -483,6 +542,13 @@ class BucketData  //this class serves the purpose of storing  all buckets
         }
         str.append(" ");
         return str.toString();
+    }
+    public String getCurrentBucket(){
+        return this.currentBucket;
+    }
+
+    public String getHashValue(){
+        return this.hashvalue;
     }
 
 }
@@ -579,6 +645,7 @@ class Convert // class for basic Utils
         }
         return null;
     }
+    /*
 
     protected static void sortBuckets(ArrayList<Bucket> buckets) //function to sort the buckets after splitting and doing other operations
     {
@@ -592,150 +659,98 @@ class SortBitString implements Comparator<Bucket> // class for sorting the bucke
     {
         return a.getBucketHashNum().compareTo(b.getBucketHashNum());//for sorting according to the value 00,01
     }
+    */
 }
-class Module2 {
-	//MAIN program connected to APP2
-	//TODO
-	//Execute module2 "every time" any button is clicked in HASHING Window
-	//by "every time" taking the initial input parameters from APP2 and the Key Value from HASHING
-	//so whenever any button is clicked in HASHING...it must take the INITIAL PARAMETERS from APP2 and the entered KEY VALUE and then execute following function
-//    public static BucketList module2(int bf, int gd, int ld, int key) throws IOException {
-    public BucketList module2(int bf, int gd, int ld, int key) {
+class Main {
+    public static void main(String[] args) throws IOException {
         System.out.println("                                ***EXTENDIBLE HASHING SIMULATOR***                                    ");
         System.out.println("    ");
-        System.out.println(" * Initial Parameters input format : bf gd ld    ");
+        System.out.println(" * Initial Parameters input format : bf m gd ld    ");
         System.out.println("                                     key operation ");
-        System.out.println("   where bf-blocking factor, gd-global depth, ld- local depth");
+        System.out.println("   where bf-blocking factor, m-hash value, gd-global depth, ld- local depth");
         System.out.println(" * Hash function is key mod 10");
         System.out.println(" * Operations are Insert - I, Delete - D, Search - S");
         System.out.println(" * Type 'exit' to exit the program ");
 
-        Hashing ob = new Hashing(bf,gd,ld);
         
-        //READING NEW INITIAL PARAMETERS
-//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-//        int bf,gd, ld, key;  
-//
-//        System.out.print("> Input Initial Parameters: ");
-//        String str = br.readLine(); // input of initial parameters stored in string str 
-//        StringTokenizer stoken = new StringTokenizer(str, " "); // for reading each parameter
-        
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
+        int bf,gd, ld,m, key;  
+        BucketList bucketList = null;  // creating a null bucketlist(bucketlist is a function)
+
+        System.out.print("> Input Initial Parameters: ");
+        String str = br.readLine(); // input of initial parameters stored in string str 
+        StringTokenizer stoken = new StringTokenizer(str, " "); // for reading each parameter
        
        /*
             Below code is to store parameter values in their respective variables
        */                                                         
-//        while(stoken.hasMoreTokens())
-//        {
-//            bf = Integer.parseInt(stoken.nextToken());
-//            gd = Integer.parseInt(stoken.nextToken());
-//            ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
-//            bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
-//            System.out.println(bucketList);    // printing the buckets with all values zero initially
-//        }
-        
-        
-        BucketList bucketList = null;  // creating a null bucketlist(bucketlist is a function)
-        bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
-        System.out.println(bucketList);    // printing the buckets with all values zero initially
+        while(stoken.hasMoreTokens())
+        {
+            bf = Integer.parseInt(stoken.nextToken());
+            m = Integer.parseInt(stoken.nextToken());
+           
+            gd = Integer.parseInt(stoken.nextToken());
+           
+            ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
+            bucketList = new BucketList(gd, ld, bf,m);  // constructing bucketlist(buckets) from input parameters
+            System.out.println(bucketList);    // printing the buckets with all values zero initially
+        }
+  do{                   
+            str = br.readLine();  // reading the input for operations. Input format key operation.
+            if(!str.equals("exit"))
+            {
+                if(str != null)
+                 {   
+                        stoken = new StringTokenizer(str, " ");
+                        if(stoken.countTokens() < 2) // condition if only one input is given
+                        {
+                            System.out.println("Please input key and operation both(check input format)");
+                        } 
+                        else 
+                        {
+                            key = Integer.parseInt(stoken.nextToken()); // storing key value in its variable
+                            switch(stoken.nextToken())   // cases for the operation
+                            {
+                                case "I":  // Insert Case
+                                 {
+                                    System.out.println("Inserted " + key + ": ");
+                                    bucketList.insertKey(key);
+                                    break;
+                                 }
+                                case "D":  // Delete case
+                                {
+                                    System.out.println("Deleted " + key + ": ");
+                                    bucketList.deleteKey(key);
+                                    break;
+                                }
+                                case "S":  // Search Case
+                                {
+                                    System.out.println("Searching key " + key + ": ");
+                                    if(bucketList.searchKey(key))
+                                    {
+                                        System.out.println("Present");
+                                    } 
+                                    else
+                                    {
+                                        System.out.println("Absent");
+                                    }
+                                    break;
+                                }
+                                
+                                default : // case when input is different from I,S,D.
+                                {
+                                    System.out.println("Not a valid operation");
+                                    break;
+                                }
+                            }
+                       }
+               }
+            }
+       System.out.println(bucketList); // Printing buckets after each operations
+        } while(!str.equals("exit"));
 
-//DO WHILE LOOP CHANGING TO PURE SWITCH-CASE CONDITIONS  
-/*
-Below do-while loop is for taking inputs of operations. Operations are insert,delete and search
-*/
-//        do{                   
-//            str = br.readLine();  // reading the input for operations. Input format key operation.
-//            if(!str.equals("exit"))
-//            {
-//                if(str != null)
-//                 {   
-//                        stoken = new StringTokenizer(str, " ");
-//                        if(stoken.countTokens() < 2) // condition if only one input is given
-//                        {
-//                            System.out.println("Please input key and operation both(check input format)");
-//                        } 
-//                        else 
-//                        {
-//                            key = Integer.parseInt(stoken.nextToken()); // storing key value in its variable
-//                            switch(stoken.nextToken())   // cases for the operation
-//                            {
-//                                case "I":  // Insert Case
-//                                 {
-//                                    System.out.println("Inserted " + key + ": ");
-//                                    bucketList.insertKey(key);
-//                                    break;
-//                                 }
-//                                case "D":  // Delete case
-//                                {
-//                                    System.out.println("Deleted " + key + ": ");
-//                                    bucketList.deleteKey(key);
-//                                    break;
-//                                }
-//                                case "S":  // Search Case
-//                                {
-//                                    System.out.println("Searching key " + key + ": ");
-//                                    if(bucketList.searchKey(key))
-//                                    {
-//                                        System.out.println("Present");
-//                                    } 
-//                                    else
-//                                    {
-//                                        System.out.println("Absent");
-//                                    }
-//                                    break;
-//                                }
-//                                
-//                                default : // case when input is different from I,S,D.
-//                                {
-//                                    System.out.println("Not a valid operation");
-//                                    break;
-//                                }
-//                            }
-//                       }
-//               }
-//            }
-//       System.out.println(bucketList); // Printing buckets after each operations
-//        } while(!str.equals("exit"));
-        
-//SWITCH-CASE CONDITIONS
-      //TODO declare and set chkbtn in Hashing.java
-      switch(ob.chkbtn)   
-      {
-          case "I":  // Insert Case
-           {
-              System.out.println("Inserted " + key + ": ");
-              bucketList.insertKey(key);
-              break;
-           }
-          case "D":  // Delete case
-          {
-              System.out.println("Deleted " + key + ": ");
-              bucketList.deleteKey(key);
-              break;
-          }
-          case "S":  // Search Case
-          {
-              System.out.println("Searching key " + key + ": ");
-              if(bucketList.searchKey(key))
-              {
-                  System.out.println("Present");
-              } 
-              else
-              {
-                  System.out.println("Absent");
-              }
-              break;
-          }
-          
-          default : // case when input is different from I,S,D.
-          {
-              System.out.println("Not a valid operation");
-              break;
-          }
-      }
-
-      System.out.println(bucketList); // Printing the buckets after exit
-      System.out.println("After the all Keys are done:\n" + bucketList);
-      
-      return bucketList;
+        System.out.println(bucketList); // Printing the buckets after exit
+        System.out.println("After the all Keys are done:\n" + bucketList);
     }
 }
+        

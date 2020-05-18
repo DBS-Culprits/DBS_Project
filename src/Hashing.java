@@ -25,11 +25,11 @@ public class Hashing extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args,int bf,int gd,int ld) {
+	public static void main(String[] args,int bf,int gd,int ld,int m) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Hashing frame = new Hashing(bf,gd,ld);
+					Hashing frame = new Hashing(bf,gd,ld,m);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,8 +41,8 @@ public class Hashing extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Hashing(int bf,int gd,int ld) {
-		BucketList bucketlist=new BucketList(gd,ld,bf);
+	public Hashing(int bf,int gd,int ld,int m) {
+		BucketList bucketlist=new BucketList(gd,ld,bf,m);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 668, 494);
