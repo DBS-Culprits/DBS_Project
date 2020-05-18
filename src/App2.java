@@ -123,20 +123,26 @@ public class App2 extends JFrame {
 					JOptionPane.showMessageDialog(null, "Please fill the parameter fields!");
 				}
 				else
-				{
-					Hashing hashing = new Hashing(Integer.parseInt(str1),Integer.parseInt(str2),Integer.parseInt(str3),Integer.parseInt(str4));
-					//TODO
-					//Disable any editing on APP2 Window during HASHING Window open. => for avoiding errors because we are taking "initial parameters" input continuously as arguments to execute module2 on every click of button in HASHING
-					//setVisible(false);
-					hashing.setVisible(true);
-					if(hashing.isVisible() == true)
+				{   
+					if(Integer.parseInt(str2)<Integer.parseInt(str3)) {
+						JOptionPane.showMessageDialog(null, "Please make sure local depth less than or equal to global depth!");
+				        }
+					else
 					{
-						gd_textField.setEditable(false);
-						ld_textField.setEditable(false);
-						bf_textField.setEditable(false);
-						m_textField.setEditable(false);
+						Hashing hashing = new Hashing(Integer.parseInt(str1),Integer.parseInt(str2),Integer.parseInt(str3),Integer.parseInt(str4));
+						//TODO
+						//Disable any editing on APP2 Window during HASHING Window open. => for avoiding errors because we are taking "initial parameters" input continuously as arguments to execute module2 on every click of button in HASHING
+						//setVisible(false);
+						hashing.setVisible(true);
+						if(hashing.isVisible() == true)
+						{
+							gd_textField.setEditable(false);
+							ld_textField.setEditable(false);
+							bf_textField.setEditable(false);
+							m_textField.setEditable(false);
+						}
 					}
-				}
+			}
 			}
 		});
 		btnConfirm.setBounds(302, 341, 97, 25);
