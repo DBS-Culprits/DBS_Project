@@ -13,8 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Color;
-import javax.swing.SwingConstants;
 
 public class App2 extends JFrame {
 	
@@ -49,7 +47,6 @@ public class App2 extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 624, 456);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(238, 232, 170));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -60,8 +57,7 @@ public class App2 extends JFrame {
 		contentPane.add(lblHashingSimulator);
 		
 		JLabel lblGlobalDepth = new JLabel("Global Depth GD :");
-		lblGlobalDepth.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblGlobalDepth.setBounds(147, 214, 103, 16);
+		lblGlobalDepth.setBounds(153, 214, 103, 16);
 		contentPane.add(lblGlobalDepth);
 		
 		gd_textField = new JTextField();
@@ -70,8 +66,7 @@ public class App2 extends JFrame {
 		gd_textField.setColumns(10);
 		
 		JLabel lblLocalDepth = new JLabel("Local Depth LD :");
-		lblLocalDepth.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblLocalDepth.setBounds(153, 161, 97, 16);
+		lblLocalDepth.setBounds(153, 161, 103, 16);
 		contentPane.add(lblLocalDepth);
 		
 		ld_textField = new JTextField();
@@ -80,8 +75,7 @@ public class App2 extends JFrame {
 		contentPane.add(ld_textField);
 		
 		JLabel lblGlobalDepth_1_1 = new JLabel("Blocking Factor Bfr :");
-		lblGlobalDepth_1_1.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblGlobalDepth_1_1.setBounds(134, 110, 116, 16);
+		lblGlobalDepth_1_1.setBounds(140, 110, 116, 16);
 		contentPane.add(lblGlobalDepth_1_1);
 		
 		bf_textField = new JTextField();
@@ -90,9 +84,7 @@ public class App2 extends JFrame {
 		contentPane.add(bf_textField);
 		
 		JLabel lblGlobalDepth_1_1_1 = new JLabel("Hash Function m :");
-		lblGlobalDepth_1_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblGlobalDepth_1_1_1.setFont(new Font("Times New Roman", Font.BOLD, 12));
-		lblGlobalDepth_1_1_1.setBounds(147, 266, 103, 16);
+		lblGlobalDepth_1_1_1.setBounds(140, 266, 116, 16);
 		contentPane.add(lblGlobalDepth_1_1_1);
 		
 		m_textField = new JTextField();
@@ -101,9 +93,6 @@ public class App2 extends JFrame {
 		contentPane.add(m_textField);
 		
 		JButton btnReset = new JButton("Reset");
-		btnReset.setForeground(new Color(255, 228, 181));
-		btnReset.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnReset.setBackground(new Color(160, 82, 45));
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Clearing out all fields
@@ -113,15 +102,16 @@ public class App2 extends JFrame {
 				m_textField.setText("");
 				//TODO
 				//Resetting and allowing to enter initial parameters again
+				gd_textField.setEditable(true);
+				ld_textField.setEditable(true);
+				bf_textField.setEditable(true);
+				m_textField.setEditable(true);
 			}
 		});
 		btnReset.setBounds(159, 341, 97, 25);
 		contentPane.add(btnReset);
 		
 		JButton btnConfirm = new JButton("Confirm");
-		btnConfirm.setForeground(new Color(255, 228, 181));
-		btnConfirm.setFont(new Font("Times New Roman", Font.BOLD, 13));
-		btnConfirm.setBackground(new Color(160, 82, 45));
 		btnConfirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//OPENING HASHING WINDOW
