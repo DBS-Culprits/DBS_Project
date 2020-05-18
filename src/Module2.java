@@ -610,7 +610,7 @@ class Module2 {
         System.out.println(" * Operations are Insert - I, Delete - D, Search - S");
         System.out.println(" * Type 'exit' to exit the program ");
 
-        Hashing ob = new Hashing();
+        Hashing ob = new Hashing(bf,gd,ld);
         
         //READING NEW INITIAL PARAMETERS
 //        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
