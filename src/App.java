@@ -89,7 +89,7 @@ public class App {
 			}
 		});
 		btnFindPrimaryKeys.setBounds(24, 131, 133, 30);
-		btnFindPrimaryKeys.setText("Find Primary Keys");
+		btnFindPrimaryKeys.setText("Find Super Keys");
 		
 		text_1 = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
 		text_1.setBounds(250, 180, 95, 26);
@@ -108,7 +108,7 @@ public class App {
 			}
 		});
 		btnMinimumCandidateKey.setBounds(229, 131, 133, 30);
-		btnMinimumCandidateKey.setText("Candidate Key");
+		btnMinimumCandidateKey.setText("Primary Key");
 		
 		text_2 = new Text(shell, SWT.BORDER | SWT.READ_ONLY);
 		text_2.setBounds(264, 347, 64, 26);
