@@ -16,17 +16,20 @@ public class Hashing extends JFrame {
 	String chkbtn = "";
 	JTextArea display_textArea;
 
+	//App2 app2 = new App2();
+//	Module2 mod2 = new Module2();
+	
 	private JPanel contentPane;
 	private JTextField key_textField;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args,int bf,int gd,int ld) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Hashing frame = new Hashing();
+					Hashing frame = new Hashing(bf,gd,ld);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +41,9 @@ public class Hashing extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Hashing() {
+	public Hashing(int bf,int gd,int ld) {
+		BucketList bucketlist=new BucketList(gd,ld,bf);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 668, 494);
 		contentPane = new JPanel();
@@ -62,18 +67,14 @@ public class Hashing extends JFrame {
 		JButton btnInsert = new JButton("Insert");
 		btnInsert.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				App2 app2 = new App2();
-				Module2 mod2 = new Module2();
-				chkbtn = "I";
+				//chkbtn = "I";
 				//TODO
 				//Handle error for empty fields
 				//System.out.println(app2.bf_textField.getText());
-				int bf = Integer.parseInt(app2.bf_textField.getText());
-				int gd = Integer.parseInt(app2.gd_textField.getText());
-				int ld = Integer.parseInt(app2.ld_textField.getText());
 				int key = Integer.parseInt(key_textField.getText());
-				BucketList bucketList = mod2.module2(bf,gd,ld,key);
-				display_textArea.setText("" + bucketList);
+				bucketlist.insertKey(key);
+				//BucketList bucketList = mod2.module2(bf,gd,ld,key);
+				display_textArea.setText("" + bucketlist);
 			}
 		});
 		btnInsert.setBounds(65, 75, 97, 25);
@@ -82,15 +83,12 @@ public class Hashing extends JFrame {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				App2 app2 = new App2();
-				Module2 mod2 = new Module2();
-				chkbtn = "S";
-				int bf = Integer.parseInt(app2.bf_textField.getText());
-				int gd = Integer.parseInt(app2.gd_textField.getText());
-				int ld = Integer.parseInt(app2.ld_textField.getText());
+			//	chkbtn = "S";
 				int key = Integer.parseInt(key_textField.getText());
-				BucketList bucketList = mod2.module2(bf,gd,ld,key);
-				display_textArea.setText("" + bucketList);
+				
+				bucketlist.searchKey(key);
+			//	BucketList bucketList = mod2.module2(bf,gd,ld,key);
+				display_textArea.setText("" + bucketlist);
 			}
 		});
 		btnSearch.setBounds(270, 75, 97, 25);
@@ -99,15 +97,11 @@ public class Hashing extends JFrame {
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				App2 app2 = new App2();
-				Module2 mod2 = new Module2();
-				chkbtn = "D";
-				int bf = Integer.parseInt(app2.bf_textField.getText());
-				int gd = Integer.parseInt(app2.gd_textField.getText());
-				int ld = Integer.parseInt(app2.ld_textField.getText());
+			//	chkbtn = "D";
 				int key = Integer.parseInt(key_textField.getText());
-				BucketList bucketList = mod2.module2(bf,gd,ld,key);
-				display_textArea.setText("" + bucketList);
+			//	BucketList bucketList = mod2.module2(bf,gd,ld,key);
+				bucketlist.deleteKey(key);
+				display_textArea.setText("" + bucketlist);
 			}
 		});
 		btnDelete.setBounds(475, 75, 97, 25);
