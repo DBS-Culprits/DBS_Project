@@ -361,12 +361,12 @@ class BucketData  //this class serves the purpose of storing  all buckets
 
     public String currentBucket, hashvalue;
     
-    public BucketList(int gd, int ld, int bf)// function to generate bucket list with initial parameters
+    public BucketList(int gd, int ld, int bf,int m)// function to generate bucket list with initial parameters
     {
         this.gd = gd;
 
 
-        this.modFunc = 100;
+        this.modFunc = m;
         this.bucketData = new BucketData(bf, ld);
         this.bucketList = new ArrayList<ListRecord>();
         
@@ -597,16 +597,16 @@ class Module2 {
     public static void main(String[] args) throws IOException {
         System.out.println("                                ***EXTENDIBLE HASHING SIMULATOR***                                    ");
         System.out.println("    ");
-        System.out.println(" * Initial Parameters input format : bf gd ld    ");
+        System.out.println(" * Initial Parameters input format : bf m gd ld    ");
         System.out.println("                                     key operation ");
-        System.out.println("   where bf-blocking factor, gd-global depth, ld- local depth");
+        System.out.println("   where bf-blocking factor, m-hash value, gd-global depth, ld- local depth");
         System.out.println(" * Hash function is key mod 10");
         System.out.println(" * Operations are Insert - I, Delete - D, Search - S");
         System.out.println(" * Type 'exit' to exit the program ");
 
         
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); 
-        int bf,gd, ld, key;  
+        int bf,gd, ld,m, key;  
         BucketList bucketList = null;  // creating a null bucketlist(bucketlist is a function)
 
         System.out.print("> Input Initial Parameters: ");
@@ -619,7 +619,10 @@ class Module2 {
         while(stoken.hasMoreTokens())
         {
             bf = Integer.parseInt(stoken.nextToken());
+            m = Integer.parseInt(stoken.nextToken());
+           
             gd = Integer.parseInt(stoken.nextToken());
+           
             ld = Integer.parseInt(stoken.nextToken()); // reading total of 4 inputs
             bucketList = new BucketList(gd, ld, bf);  // constructing bucketlist(buckets) from input parameters
             System.out.println(bucketList);    // printing the buckets with all values zero initially
